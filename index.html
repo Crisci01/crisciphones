@@ -82,6 +82,15 @@
     </div>
   </header>
 
+  <!-- ALERTA TOAST PLAN CANJE -->
+  <div id="toast-alert" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-amber-50 border border-amber-300 text-amber-800 px-5 py-3 rounded-2xl shadow-lg hidden items-center gap-3 transition-opacity duration-300 w-[90%] max-w-md">
+    <span class="text-2xl">⚠️</span>
+    <div class="text-xs sm:text-sm font-medium leading-tight">
+      <strong>Aviso importante:</strong> El precio estimado de tu usado podría variar una vez que el equipo sea evaluado físicamente en el local.
+    </div>
+    <button onclick="document.getElementById('toast-alert').classList.add('hidden')" class="ml-2 text-amber-600 hover:text-amber-900 flex-shrink-0">✕</button>
+  </div>
+
   <!-- HERO PRINCIPAL -->
   <section class="relative overflow-hidden bg-[#F5F5F7] border-b border-gray-200/70">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex flex-col lg:flex-row items-center justify-between gap-10">
@@ -113,7 +122,7 @@
           <span class="text-xs text-gray-400 font-medium">Destacados de hoy</span>
         </div>
         <div class="space-y-3">
-          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3">
+          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-200 transition" onclick="openProductModal('eq-s25u')">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase">Samsung Flagship</p>
               <h3 class="font-bold text-base text-[#1D1D1F]">Samsung Galaxy S25 Ultra</h3>
@@ -121,11 +130,11 @@
             </div>
             <div class="text-right">
               <p class="font-extrabold text-base text-[#1D1D1F]" data-price-ars="1200000">$1.200.000</p>
-              <a href="#catalogo" class="text-[11px] font-semibold text-blue-600 hover:underline">Ver equipo →</a>
+              <span class="text-[11px] font-semibold text-blue-600 hover:underline">Ver equipo →</span>
             </div>
           </div>
 
-          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3">
+          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-200 transition" onclick="openProductModal('eq-13pro')">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase">Apple Usado Seleccionado</p>
               <h3 class="font-bold text-base text-[#1D1D1F]">iPhone 13 Pro 128GB</h3>
@@ -133,7 +142,7 @@
             </div>
             <div class="text-right">
               <p class="font-extrabold text-base text-[#1D1D1F]" data-price-ars="630000">$630.000</p>
-              <a href="#catalogo" class="text-[11px] font-semibold text-blue-600 hover:underline">Ver equipo →</a>
+              <span class="text-[11px] font-semibold text-blue-600 hover:underline">Ver equipo →</span>
             </div>
           </div>
         </div>
@@ -145,7 +154,7 @@
     </div>
   </section>
 
-  <!-- BANNER ACTIVO DE PLAN CANJE (Aparece cuando el usuario cotiza su usado) -->
+  <!-- BANNER ACTIVO DE PLAN CANJE -->
   <div id="tradein-active-banner" class="hidden bg-blue-600 text-white py-3 px-4 sticky top-16 z-30 shadow-md">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
       <div class="flex items-center gap-2">
@@ -187,7 +196,7 @@
     </div>
   </section>
 
-  <!-- SIMULADOR DE PLAN CANJE (BASADO EN LISTA MAYORISTA REAL) -->
+  <!-- SIMULADOR DE PLAN CANJE -->
   <section id="plan-canje" class="bg-[#F5F5F7] border-y border-gray-200/80 py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-200/80">
@@ -204,7 +213,7 @@
           <div class="md:col-span-2 space-y-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">1. Tu modelo de iPhone actual</label>
-              <select id="ti-model" onchange="calculateTradeIn()" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
+              <select id="ti-model" onchange="calculateTradeIn(true)" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
                 <!-- Opciones cargadas desde el PDF Mayorista -->
               </select>
             </div>
@@ -212,7 +221,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">2. Condición de Batería</label>
-                <select id="ti-battery" onchange="calculateTradeIn()" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
+                <select id="ti-battery" onchange="calculateTradeIn(true)" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
                   <option value="0">90% a 100% (Óptima)</option>
                   <option value="-15" selected>80% a 89% (Normal)</option>
                   <option value="-35">Menos de 80% (Servicio / Cambio)</option>
@@ -221,7 +230,7 @@
 
               <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">3. Estado Estético / Funcional</label>
-                <select id="ti-condition" onchange="calculateTradeIn()" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
+                <select id="ti-condition" onchange="calculateTradeIn(true)" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
                   <option value="0" selected>Impecable (Todo original sin detalles)</option>
                   <option value="-30">Detalles estéticos leves de uso</option>
                   <option value="-75">Detalle en cámara (ej. x0.5 / x3) o pantalla</option>
@@ -252,7 +261,7 @@
                 Aplicar este Canje al Catálogo
               </button>
               <button onclick="sendTradeInWhatsApp()" class="w-full bg-green-600 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-green-500 transition">
-                Consultar este Canje por WhatsApp
+                Consultar por WhatsApp
               </button>
             </div>
           </div>
@@ -307,10 +316,71 @@
     </div>
   </footer>
 
+  <!-- MODAL DETALLE DE PRODUCTO (PARA EQUIPOS EN STOCK) -->
+  <div id="product-modal" class="fixed inset-0 z-50 hidden">
+    <!-- Fondo oscuro -->
+    <div onclick="closeProductModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+    
+    <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row pointer-events-auto relative">
+        
+        <!-- Botón cerrar -->
+        <button onclick="closeProductModal()" class="absolute top-4 right-4 z-20 w-8 h-8 bg-black/10 rounded-full flex items-center justify-center text-black hover:bg-black/20 transition backdrop-blur-md">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        
+        <!-- Sección de Imágenes -->
+        <div class="w-full md:w-1/2 bg-gray-100 flex flex-col relative h-[40vh] md:h-auto">
+          <!-- Imagen Principal -->
+          <div class="flex-1 w-full bg-white relative flex items-center justify-center overflow-hidden">
+            <img id="modal-main-img" src="" class="object-cover w-full h-full" alt="Imagen principal del equipo" />
+          </div>
+          <!-- Miniaturas -->
+          <div id="modal-thumbnails" class="flex gap-3 p-4 bg-gray-50 overflow-x-auto no-scrollbar border-t border-gray-200">
+            <!-- Las miniaturas se inyectan acá vía JS -->
+          </div>
+        </div>
+
+        <!-- Información del Equipo -->
+        <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto">
+          <div>
+            <span id="modal-badge" class="inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3"></span>
+            <h3 id="modal-title" class="font-extrabold text-2xl md:text-3xl text-[#1D1D1F] leading-tight"></h3>
+            <div class="mt-4 space-y-2">
+              <p class="flex items-center gap-2 text-sm text-gray-700 font-medium">
+                <span class="text-lg">✨</span> <span id="modal-condition"></span>
+              </p>
+              <p class="flex items-center gap-2 text-sm text-gray-700 font-medium">
+                <span class="text-lg">📱</span> <span id="modal-specs"></span>
+              </p>
+            </div>
+            
+            <div class="mt-6 pt-5 border-t border-gray-200/80">
+              <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-1">Precio de lista</p>
+              <p id="modal-price" class="text-4xl font-extrabold text-[#1D1D1F] tracking-tight"></p>
+              <p id="modal-price-sub" class="text-sm text-gray-500 font-medium mt-1"></p>
+              
+              <!-- Div para mostrar si hay plan canje aplicado -->
+              <div id="modal-tradein-diff" class="mt-4"></div>
+            </div>
+          </div>
+
+          <div class="mt-8 space-y-3">
+            <button id="modal-add-btn" class="w-full bg-[#1D1D1F] text-white py-4 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-black/85 transition shadow-lg">
+              Agregar al Pedido
+            </button>
+            <p class="text-center text-[11px] text-gray-400 font-medium mt-2">Podrás elegir el medio de pago antes de confirmar.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <!-- DRAWER CARRITO LATERAL -->
   <div id="cart-modal" class="fixed inset-0 z-50 hidden">
     <div onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 backdrop-blur-xs"></div>
-    <div class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col z-10">
+    <div class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col z-10 transition-transform">
       <div class="p-5 border-b border-gray-200 flex items-center justify-between">
         <div>
           <h3 class="font-extrabold text-lg">Tu Pedido en Crisciphones</h3>
@@ -360,15 +430,15 @@
   <script>
     // CONFIGURACIÓN DE CRISCIPHONES
     const WHATSAPP_NUMBER = "5492634308126";
-    const EXCHANGE_RATE = 1570; // Cotización fija inicial solicitada ($1.570 ARS)
-    let currentCurrency = "ARS"; // Arranca en Pesos para que se vea $1.200.000 y $630.000 exactos
+    const EXCHANGE_RATE = 1570;
+    let currentCurrency = "ARS";
     let currentCategory = "all";
     let cart = [];
     let appliedTradeIn = null;
+    let tradeInAlertShown = false; // Control de la alerta
 
-    // CATÁLOGO REAL (Extraído de tu Excel Control_$$% + Opciones a Pedido del PDF Mayorista)
+    // CATÁLOGO REAL
     const PRODUCTS = [
-      // 1. EQUIPOS EN STOCK INMEDIATO (Los 2 equipos confirmados)
       {
         id: "eq-s25u",
         name: "Samsung Galaxy S25 Ultra",
@@ -379,7 +449,8 @@
         specs: "Color Blanco • 1 Unidad disponible",
         priceArs: 1200000,
         stock: 1,
-        image: "s25u.jpg"
+        image: "s25u.jpg",
+        images: ["s25u.jpg", "s25u_lat.jpg", "s25u_back.jpg"] // Array para la galería
       },
       {
         id: "eq-13pro",
@@ -391,10 +462,9 @@
         specs: "Color Dorado (Gold) • 1 Unidad disponible",
         priceArs: 630000,
         stock: 1,
-        image: "iph13drd79.JPG"
+        image: "iph13drd79.JPG",
+        images: ["iph13drd79.JPG", "iph13_lat.jpg", "iph13_back.jpg"] // Array para la galería
       },
-
-      // 2. ACCESORIOS EN STOCK (Extraídos de la hoja 'Control de Accesorios' de tu Excel)
       {
         id: "acc-002",
         name: "Cargador 20W USB-C (Calidad Original)",
@@ -443,8 +513,6 @@
         stock: 3,
         image: "cablelng.jpg"
       },
-
-      // 3. EQUIPOS DISPONIBLES POR ENCARGO (Traídos de tu lista mayorista para que el cliente consulte)
       {
         id: "ped-15",
         name: "iPhone 15 128GB (A Pedido)",
@@ -453,7 +521,7 @@
         badgeColor: "bg-blue-50 text-blue-700",
         condition: "Seleccionado 90% a 100% Bat.",
         specs: "Black / Blue / Pink • Consultá ingreso",
-        priceArs: null, // Muestra "Consultar / Cotizar con Canje"
+        priceArs: null,
         stock: 5,
         image: "iph15bk.jpg"
       },
@@ -495,7 +563,6 @@
       }
     ];
 
-    // TABLA DE TOMA DE USADOS (Extraída directamente del PDF MAYORISTA 20/10/2026)
     const TRADEIN_MODELS = [
       { name: "iPhone 13 Mini 128GB", baseUsd: 265 },
       { name: "iPhone 13 128GB", baseUsd: 280 },
@@ -522,7 +589,6 @@
       { name: "iPhone 17 256GB", baseUsd: 785 }
     ];
 
-    // FORMATEADOR DE PRECIOS
     function formatMoney(amountArs) {
       if (currentCurrency === "ARS") {
         return "$" + Math.round(amountArs).toLocaleString("es-AR");
@@ -532,7 +598,6 @@
       }
     }
 
-    // CAMBIAR MONEDA (ARS / USD)
     function setCurrency(curr) {
       currentCurrency = curr;
       const btnArs = document.getElementById("btn-ars");
@@ -544,7 +609,6 @@
         btnUsd.className = "px-2.5 py-1 rounded-full bg-[#1D1D1F] text-white transition";
         btnArs.className = "px-2.5 py-1 rounded-full text-gray-600 hover:text-black transition";
       }
-      // Actualizar precios fijos del Hero
       document.querySelectorAll("[data-price-ars]").forEach(el => {
         const val = Number(el.getAttribute("data-price-ars"));
         el.textContent = formatMoney(val);
@@ -553,7 +617,6 @@
       renderCart();
     }
 
-    // FILTRAR CATEGORÍA
     function filterCategory(cat) {
       currentCategory = cat;
       document.querySelectorAll(".cat-btn").forEach(btn => {
@@ -566,7 +629,72 @@
       renderProducts();
     }
 
-    // RENDERIZAR PRODUCTOS
+    // MODAL DE DETALLE DE EQUIPO
+    function openProductModal(productId) {
+      const p = PRODUCTS.find(x => x.id === productId);
+      if(!p) return;
+      
+      const modal = document.getElementById("product-modal");
+      modal.classList.remove("hidden");
+      
+      // Textos y etiquetas
+      const badge = document.getElementById("modal-badge");
+      badge.className = p.badgeColor + " inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3";
+      badge.textContent = p.badge;
+      
+      document.getElementById("modal-title").textContent = p.name;
+      document.getElementById("modal-condition").textContent = p.condition;
+      document.getElementById("modal-specs").textContent = p.specs;
+      
+      // Galería de Imágenes
+      document.getElementById("modal-main-img").src = p.image;
+      const thumbsContainer = document.getElementById("modal-thumbnails");
+      
+      if (p.images && p.images.length > 0) {
+        thumbsContainer.innerHTML = p.images.map(img => `
+          <img src="${img}" onclick="document.getElementById('modal-main-img').src='${img}'" 
+               class="w-20 h-20 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-black opacity-80 hover:opacity-100 transition shadow-sm" />
+        `).join("");
+      } else {
+        thumbsContainer.innerHTML = ""; // Sin extras
+      }
+
+      // Precios
+      const priceEl = document.getElementById("modal-price");
+      const subPriceEl = document.getElementById("modal-price-sub");
+      const tradeInDiv = document.getElementById("modal-tradein-diff");
+      
+      if(p.priceArs !== null) {
+        priceEl.textContent = formatMoney(p.priceArs);
+        subPriceEl.textContent = currentCurrency === "ARS" 
+          ? `Equivale a USD ${Math.round(p.priceArs / EXCHANGE_RATE)}` 
+          : `En pesos: $${p.priceArs.toLocaleString("es-AR")} ARS`;
+          
+        if(appliedTradeIn) {
+          const diff = Math.max(0, p.priceArs - appliedTradeIn.valueArs);
+          tradeInDiv.innerHTML = `
+            <div class="mt-4 bg-blue-600 text-white px-4 py-3 rounded-2xl flex items-center justify-between shadow-sm">
+              <span class="text-sm font-semibold">Con tu Canje pagás:</span>
+              <span class="text-xl font-extrabold">${formatMoney(diff)}</span>
+            </div>
+          `;
+        } else {
+          tradeInDiv.innerHTML = "";
+        }
+      }
+      
+      // Botón de acción
+      const btn = document.getElementById("modal-add-btn");
+      btn.onclick = () => {
+        addToCart(p.id);
+        closeProductModal();
+      };
+    }
+
+    function closeProductModal() {
+      document.getElementById("product-modal").classList.add("hidden");
+    }
+
     function renderProducts() {
       const grid = document.getElementById("products-grid");
       const filtered = currentCategory === "all"
@@ -608,7 +736,25 @@
           `;
         }
 
-        const btnLabel = p.priceArs !== null ? "Agregar al Pedido" : "Consultar Ingreso";
+        let buttonHtml = "";
+        let imgTag = `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl" />`;
+        
+        // Cambiar lógica de botón e imagen según sea equipo o accesorio/pedido
+        if (p.category === "equipos") {
+          imgTag = `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl cursor-pointer hover:scale-110 transition duration-500" onclick="openProductModal('${p.id}')" />`;
+          buttonHtml = `
+            <button onclick="openProductModal('${p.id}')" class="mt-4 w-full bg-white text-[#1D1D1F] border border-gray-300 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-gray-100 transition">
+              Ver Detalles y Fotos
+            </button>
+          `;
+        } else {
+          const btnLabel = p.priceArs !== null ? "Agregar al Pedido" : "Consultar Ingreso";
+          buttonHtml = `
+            <button onclick="addToCart('${p.id}')" class="mt-4 w-full bg-[#1D1D1F] text-white py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-black/80 transition">
+              ${btnLabel}
+            </button>
+          `;
+        }
 
         return `
           <div class="apple-card rounded-3xl p-5 flex flex-col justify-between border border-gray-200/60">
@@ -617,29 +763,25 @@
                 <span class="${p.badgeColor} text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">${p.badge}</span>
               </div>
               <div class="aspect-square rounded-2xl bg-white overflow-hidden mb-4 flex items-center justify-center p-4">
-                <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl" />
+                ${imgTag}
               </div>
               <h3 class="font-bold text-base text-[#1D1D1F] leading-snug">${p.name}</h3>
               <p class="text-xs font-semibold text-gray-600 mt-1">${p.condition}</p>
               <p class="text-xs text-gray-500 mt-0.5">${p.specs}</p>
               ${priceHtml}
             </div>
-
-            <button onclick="addToCart('${p.id}')" class="mt-4 w-full bg-[#1D1D1F] text-white py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-black/80 transition">
-              ${btnLabel}
-            </button>
+            ${buttonHtml}
           </div>
         `;
       }).join("");
     }
 
-    // INICIALIZAR COTIZADOR PLAN CANJE
     function initTradeIn() {
       const sel = document.getElementById("ti-model");
       sel.innerHTML = TRADEIN_MODELS.map((m, idx) =>
         `<option value="${idx}" ${m.name.includes("iPhone 13 128GB") ? "selected" : ""}>${m.name} (Ref. Mayorista USD ${m.baseUsd})</option>`
       ).join("");
-      calculateTradeIn();
+      calculateTradeIn(false);
     }
 
     function getCurrentTradeInQuote() {
@@ -648,7 +790,6 @@
       const condAdj = Number(document.getElementById("ti-condition").value || 0);
       const model = TRADEIN_MODELS[idx];
 
-      // Si el modelo base ya contempla 80-89% en varios gama alta, ajustamos suave para que coincida con el PDF mayorista
       const finalUsd = Math.max(120, model.baseUsd + batAdj + condAdj);
       const finalArs = finalUsd * EXCHANGE_RATE;
 
@@ -664,7 +805,8 @@
       };
     }
 
-    function calculateTradeIn() {
+    // Se agregó el parámetro isUserAction para disparar la alerta solo cuando interactúa
+    function calculateTradeIn(isUserAction) {
       const q = getCurrentTradeInQuote();
       document.getElementById("ti-result-ars").textContent = "$" + q.valueArs.toLocaleString("es-AR") + " ARS";
       document.getElementById("ti-result-usd").textContent = `Equivalente a USD ${q.valueUsd} (TC $${EXCHANGE_RATE})`;
@@ -672,6 +814,19 @@
       const diffS25 = Math.max(0, 1200000 - q.valueArs);
       document.getElementById("ti-summary-Difference").innerHTML =
         `💡 Por el <strong>Samsung S25 Ultra</strong> pagarías una diferencia aprox. de <strong>$${diffS25.toLocaleString("es-AR")}</strong>.`;
+
+      // Mostrar Alerta (Toast) la primera vez que interactúa
+      if(isUserAction && !tradeInAlertShown) {
+        const toast = document.getElementById("toast-alert");
+        toast.classList.remove("hidden");
+        toast.classList.add("flex");
+        // Auto ocultar después de 6 segundos
+        setTimeout(() => {
+          toast.classList.add("hidden");
+          toast.classList.remove("flex");
+        }, 6000);
+        tradeInAlertShown = true;
+      }
     }
 
     function applyTradeInToStore() {
@@ -703,7 +858,6 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    // CARRITO DE COMPRAS
     function addToCart(productId) {
       const prod = PRODUCTS.find(p => p.id === productId);
       if (!prod) return;
