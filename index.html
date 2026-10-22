@@ -137,3 +137,664 @@
               <p class="font-extrabold text-base text-[#1D1D1F]" data-price-ars="630000">$630.000</p>
               <a href="#catalogo" class="text-[11px] font-semibold text-blue-600 hover:underline">Ver equipo →</a>
             </div>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+          <span>📍 Atención personalizada por WhatsApp</span>
+          <a href="https://instagram.com/crisciphones" target="_blank" class="font-semibold text-[#1D1D1F] hover:underline">@crisciphones</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER ACTIVO DE PLAN CANJE (Aparece cuando el usuario cotiza su usado) -->
+  <div id="tradein-active-banner" class="hidden bg-blue-600 text-white py-3 px-4 sticky top-16 z-30 shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+      <div class="flex items-center gap-2">
+        <span class="bg-white text-blue-600 font-extrabold px-2 py-0.5 rounded-full text-[11px]">CANJE ACTIVO</span>
+        <span id="tradein-banner-text" class="font-medium">Tu usado se descuenta automáticamente de los precios del catálogo.</span>
+      </div>
+      <button onclick="clearTradeIn()" class="underline font-semibold hover:text-blue-100 text-xs">Quitar Plan Canje</button>
+    </div>
+  </div>
+
+  <!-- SECCIÓN CATÁLOGO -->
+  <section id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Catálogo Crisciphones</h2>
+        <p class="text-sm text-gray-500 mt-1">Equipos en stock físico real, ingresos a pedido y accesorios en stock.</p>
+      </div>
+
+      <!-- Filtros de Categoría -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <button onclick="filterCategory('all')" data-cat="all" class="cat-btn bg-[#1D1D1F] text-white px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+          Todos (10)
+        </button>
+        <button onclick="filterCategory('equipos')" data-cat="equipos" class="cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+          ⚡ Equipos en Stock (2)
+        </button>
+        <button onclick="filterCategory('accesorios')" data-cat="accesorios" class="cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+          🔌 Accesorios en Stock (4)
+        </button>
+        <button onclick="filterCategory('pedido')" data-cat="pedido" class="cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+          📦 Por Encargo / Mayorista (4)
+        </button>
+      </div>
+    </div>
+
+    <!-- Grilla de Productos -->
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Renderizado por JS -->
+    </div>
+  </section>
+
+  <!-- SIMULADOR DE PLAN CANJE (BASADO EN LISTA MAYORISTA REAL) -->
+  <section id="plan-canje" class="bg-[#F5F5F7] border-y border-gray-200/80 py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-200/80">
+        <div class="max-w-2xl">
+          <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cotizador Online Oficial</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-3">Simulá tu Plan Canje en segundos</h2>
+          <p class="text-sm text-gray-600 mt-2">
+            Seleccioná el modelo de iPhone que tenés hoy, su condición y porcentaje de batería. Calculamos el valor de toma de referencia (en USD y Pesos al cambio de <strong>$1.570</strong>) para que veas qué diferencia tenés que pagar por otro equipo.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 items-center">
+          <!-- Controles de Selección -->
+          <div class="md:col-span-2 space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">1. Tu modelo de iPhone actual</label>
+              <select id="ti-model" onchange="calculateTradeIn()" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
+                <!-- Opciones cargadas desde el PDF Mayorista -->
+              </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">2. Condición de Batería</label>
+                <select id="ti-battery" onchange="calculateTradeIn()" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
+                  <option value="0">90% a 100% (Óptima)</option>
+                  <option value="-15" selected>80% a 89% (Normal)</option>
+                  <option value="-35">Menos de 80% (Servicio / Cambio)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">3. Estado Estético / Funcional</label>
+                <select id="ti-condition" onchange="calculateTradeIn()" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
+                  <option value="0" selected>Impecable (Todo original sin detalles)</option>
+                  <option value="-30">Detalles estéticos leves de uso</option>
+                  <option value="-75">Detalle en cámara (ej. x0.5 / x3) o pantalla</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+              * Cotización sujeta a revisión física presencial del equipo (Face ID funcionando, sin cuenta iCloud bloqueada, pantalla y cámaras verificadas).
+            </p>
+          </div>
+
+          <!-- Resultado de la Cotización -->
+          <div class="bg-[#1D1D1F] text-white rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] uppercase tracking-widest text-gray-400 font-semibold">Valor estimado de toma</span>
+              <div class="mt-2">
+                <p id="ti-result-ars" class="text-3xl font-extrabold tracking-tight text-white">$439.600</p>
+                <p id="ti-result-usd" class="text-sm font-medium text-gray-300 mt-0.5">Equivalente a USD 280</p>
+              </div>
+              <div class="mt-4 pt-4 border-t border-white/15 text-xs text-gray-300 space-y-1">
+                <p id="ti-summary-Difference" class="font-medium"></p>
+              </div>
+            </div>
+
+            <div class="mt-6 space-y-2">
+              <button onclick="applyTradeInToStore()" class="w-full bg-white text-[#1D1D1F] py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-gray-100 transition">
+                Aplicar este Canje al Catálogo
+              </button>
+              <button onclick="sendTradeInWhatsApp()" class="w-full bg-green-600 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-green-500 transition">
+                Consultar este Canje por WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS Y CONFIANZA -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl bg-[#F5F5F7]">
+        <div class="text-2xl mb-2">🛡️</div>
+        <h3 class="font-bold text-base">Equipos Verificados</h3>
+        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+          Todos nuestros teléfonos pasan por revisión completa de cámaras, sensores, Face ID, micrófonos y salud real de batería.
+        </p>
+      </div>
+      <div class="p-6 rounded-2xl bg-[#F5F5F7]">
+        <div class="text-2xl mb-2">🔄</div>
+        <h3 class="font-bold text-base">Plan Canje Transparente</h3>
+        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+          Tomamos tu usado al mejor valor del mercado mayorista para que renueves tu equipo entregando el tuyo en el mismo momento.
+        </p>
+      </div>
+      <div class="p-6 rounded-2xl bg-[#F5F5F7]">
+        <div class="text-2xl mb-2">💵</div>
+        <h3 class="font-bold text-base">Múltiples Medios de Pago</h3>
+        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+          Aceptamos Pesos Argentinos (Efectivo o Transferencia), Dólares billete, USDT y financiación personalizada.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#1D1D1F] text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div>
+        <span class="font-extrabold text-xl tracking-tight">CRISCIPHONES</span>
+        <p class="text-xs text-gray-400 mt-1">Venta de celulares seleccionados, importados y accesorios.</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-4 text-xs font-semibold">
+        <a href="https://wa.me/5492634308126" target="_blank" class="bg-white/10 hover:bg-white/20 px-4 py-2.5 rounded-full transition">
+          📱 WhatsApp: 263 430-8126
+        </a>
+        <a href="https://instagram.com/crisciphones" target="_blank" class="bg-white/10 hover:bg-white/20 px-4 py-2.5 rounded-full transition">
+          📸 Instagram: @crisciphones
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- DRAWER CARRITO LATERAL -->
+  <div id="cart-modal" class="fixed inset-0 z-50 hidden">
+    <div onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 backdrop-blur-xs"></div>
+    <div class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col z-10">
+      <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+        <div>
+          <h3 class="font-extrabold text-lg">Tu Pedido en Crisciphones</h3>
+          <p class="text-xs text-gray-500">Se envía directo a nuestro WhatsApp para coordinar</p>
+        </div>
+        <button onclick="toggleCart(false)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-black">✕</button>
+      </div>
+
+      <!-- Items del Carrito -->
+      <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+
+      <!-- Resumen e Checkout -->
+      <div class="p-5 bg-[#F5F5F7] border-t border-gray-200 space-y-3">
+        <div id="cart-tradein-box" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 flex items-center justify-between">
+          <span id="cart-tradein-label">Plan Canje aplicado</span>
+          <button onclick="clearTradeIn()" class="text-blue-700 underline font-semibold">Quitar</button>
+        </div>
+
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600 font-medium">Total a pagar (o diferencia):</span>
+          <span id="cart-total" class="text-xl font-extrabold text-[#1D1D1F]">$0</span>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold uppercase text-gray-500 mb-1">Forma de pago preferida</label>
+          <select id="cart-payment" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-semibold">
+            <option value="Efectivo / Transferencia en Pesos">Efectivo / Transferencia en Pesos</option>
+            <option value="Dólares Billete / USDT">Dólares Billete / USDT</option>
+            <option value="Plan Canje (Entrego mi usado + diferencia)">Plan Canje (Entrego mi usado + diferencia)</option>
+            <option value="Consulta por Financiación / Cuotas">Consulta por Financiación / Cuotas</option>
+          </select>
+        </div>
+
+        <button onclick="checkoutWhatsApp()" class="w-full bg-green-600 hover:bg-green-500 text-white py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md transition">
+          <span>Finalizar Pedido por WhatsApp</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+  <a href="https://wa.me/5492634308126?text=Hola%20Crisciphones!%20Vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank"
+     class="fixed bottom-5 right-5 z-40 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-lg hover:scale-105 transition flex items-center gap-2 font-bold text-xs">
+    <span>💬 WhatsApp Directo</span>
+  </a>
+
+  <script>
+    // CONFIGURACIÓN DE CRISCIPHONES
+    const WHATSAPP_NUMBER = "5492634308126";
+    const EXCHANGE_RATE = 1570; // Cotización fija inicial solicitada ($1.570 ARS)
+    let currentCurrency = "ARS"; // Arranca en Pesos para que se vea $1.200.000 y $630.000 exactos
+    let currentCategory = "all";
+    let cart = [];
+    let appliedTradeIn = null;
+
+    // CATÁLOGO REAL (Extraído de tu Excel Control_$$% + Opciones a Pedido del PDF Mayorista)
+    const PRODUCTS = [
+      // 1. EQUIPOS EN STOCK INMEDIATO (Los 2 equipos confirmados)
+      {
+        id: "eq-s25u",
+        name: "Samsung Galaxy S25 Ultra",
+        category: "equipos",
+        badge: "⚡ EN STOCK INMEDIATO",
+        badgeColor: "bg-green-100 text-green-800",
+        condition: "Usado Seleccionado • Impecable",
+        specs: "Color Blanco • 1 Unidad disponible",
+        priceArs: 1200000,
+        stock: 1,
+        image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "eq-13pro",
+        name: "iPhone 13 Pro 128GB",
+        category: "equipos",
+        badge: "⚡ EN STOCK INMEDIATO",
+        badgeColor: "bg-green-100 text-green-800",
+        condition: "Usado Seleccionado • Batería 79%",
+        specs: "Color Dorado (Gold) • 1 Unidad disponible",
+        priceArs: 630000,
+        stock: 1,
+        image: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=700&q=80"
+      },
+
+      // 2. ACCESORIOS EN STOCK (Extraídos de la hoja 'Control de Accesorios' de tu Excel)
+      {
+        id: "acc-002",
+        name: "Cargador 20W USB-C (Calidad Original)",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (9 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo en caja",
+        specs: "Carga rápida 20W para iPhone",
+        priceArs: 32000,
+        stock: 9,
+        image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "acc-005",
+        name: "Cargador 20W Réplica Apple",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (2 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo en caja",
+        specs: "Fuente de carga económica compatible",
+        priceArs: 15000,
+        stock: 2,
+        image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "acc-003",
+        name: "Cable USB-C para iPhone",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (5 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo",
+        specs: "Ficha Tipo C de carga rápida",
+        priceArs: 10000,
+        stock: 5,
+        image: "https://images.unsplash.com/photo-1542393545-10f5cde2c810?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "acc-004",
+        name: "Cable Lightning para iPhone",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (3 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo",
+        specs: "Compatible con iPhone 11 al 14 Pro Max",
+        priceArs: 10000,
+        stock: 3,
+        image: "https://images.unsplash.com/photo-1542393545-10f5cde2c810?auto=format&fit=crop&w=700&q=80"
+      },
+
+      // 3. EQUIPOS DISPONIBLES POR ENCARGO (Traídos de tu lista mayorista para que el cliente consulte)
+      {
+        id: "ped-15",
+        name: "iPhone 15 128GB (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Seleccionado 90% a 100% Bat.",
+        specs: "Black / Blue / Pink • Consultá ingreso",
+        priceArs: null, // Muestra "Consultar / Cotizar con Canje"
+        stock: 5,
+        image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "ped-16pro",
+        name: "iPhone 16 Pro 128GB / 256GB (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Seleccionado +90% Bat.",
+        specs: "Desert / Natural / Black / White",
+        priceArs: null,
+        stock: 5,
+        image: "https://images.unsplash.com/photo-1726828537956-61ae115d7d7a?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "ped-17",
+        name: "iPhone 17 256GB (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Open Box / 100% Batería",
+        specs: "Black / Mist Blue / Lavender / Sage",
+        priceArs: null,
+        stock: 5,
+        image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "ped-17pro",
+        name: "iPhone 17 Pro / Pro Max (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Open Box / Garantía Oficial Apple",
+        specs: "Cosmic Orange / Deep Blue / Silver",
+        priceArs: null,
+        stock: 5,
+        image: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=700&q=80"
+      }
+    ];
+
+    // TABLA DE TOMA DE USADOS (Extraída directamente del PDF MAYORISTA 20/10/2026)
+    const TRADEIN_MODELS = [
+      { name: "iPhone 13 Mini 128GB", baseUsd: 265 },
+      { name: "iPhone 13 128GB", baseUsd: 280 },
+      { name: "iPhone 13 256GB", baseUsd: 300 },
+      { name: "iPhone 13 Pro 128GB", baseUsd: 390 },
+      { name: "iPhone 13 Pro 256GB", baseUsd: 450 },
+      { name: "iPhone 13 Pro Max 128GB", baseUsd: 480 },
+      { name: "iPhone 14 128GB", baseUsd: 305 },
+      { name: "iPhone 14 256GB", baseUsd: 330 },
+      { name: "iPhone 14 Plus 128GB", baseUsd: 380 },
+      { name: "iPhone 14 Plus 256GB", baseUsd: 415 },
+      { name: "iPhone 14 Pro 128GB", baseUsd: 450 },
+      { name: "iPhone 14 Pro Max 128GB", baseUsd: 530 },
+      { name: "iPhone 15 128GB", baseUsd: 435 },
+      { name: "iPhone 15 Plus 128GB", baseUsd: 470 },
+      { name: "iPhone 15 Pro 128GB", baseUsd: 570 },
+      { name: "iPhone 15 Pro 256GB", baseUsd: 600 },
+      { name: "iPhone 16e 128GB", baseUsd: 415 },
+      { name: "iPhone 16 128GB", baseUsd: 585 },
+      { name: "iPhone 16 Plus 128GB", baseUsd: 640 },
+      { name: "iPhone 16 Pro 128GB", baseUsd: 730 },
+      { name: "iPhone 16 Pro 256GB", baseUsd: 745 },
+      { name: "iPhone 16 Pro Max 256GB", baseUsd: 835 },
+      { name: "iPhone 17 256GB", baseUsd: 785 }
+    ];
+
+    // FORMATEADOR DE PRECIOS
+    function formatMoney(amountArs) {
+      if (currentCurrency === "ARS") {
+        return "$" + Math.round(amountArs).toLocaleString("es-AR");
+      } else {
+        const usd = Math.round(amountArs / EXCHANGE_RATE);
+        return "USD " + usd.toLocaleString("es-AR");
+      }
+    }
+
+    // CAMBIAR MONEDA (ARS / USD)
+    function setCurrency(curr) {
+      currentCurrency = curr;
+      const btnArs = document.getElementById("btn-ars");
+      const btnUsd = document.getElementById("btn-usd");
+      if (curr === "ARS") {
+        btnArs.className = "px-2.5 py-1 rounded-full bg-[#1D1D1F] text-white transition";
+        btnUsd.className = "px-2.5 py-1 rounded-full text-gray-600 hover:text-black transition";
+      } else {
+        btnUsd.className = "px-2.5 py-1 rounded-full bg-[#1D1D1F] text-white transition";
+        btnArs.className = "px-2.5 py-1 rounded-full text-gray-600 hover:text-black transition";
+      }
+      // Actualizar precios fijos del Hero
+      document.querySelectorAll("[data-price-ars]").forEach(el => {
+        const val = Number(el.getAttribute("data-price-ars"));
+        el.textContent = formatMoney(val);
+      });
+      renderProducts();
+      renderCart();
+    }
+
+    // FILTRAR CATEGORÍA
+    function filterCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        if (btn.getAttribute("data-cat") === cat) {
+          btn.className = "cat-btn bg-[#1D1D1F] text-white px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition";
+        } else {
+          btn.className = "cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition";
+        }
+      });
+      renderProducts();
+    }
+
+    // RENDERIZAR PRODUCTOS
+    function renderProducts() {
+      const grid = document.getElementById("products-grid");
+      const filtered = currentCategory === "all"
+        ? PRODUCTS
+        : PRODUCTS.filter(p => p.category === currentCategory);
+
+      grid.innerHTML = filtered.map(p => {
+        let priceHtml = "";
+        if (p.priceArs !== null) {
+          const mainPrice = formatMoney(p.priceArs);
+          const secondaryPrice = currentCurrency === "ARS"
+            ? `Equivale a USD ${Math.round(p.priceArs / EXCHANGE_RATE)}`
+            : `En pesos: $${p.priceArs.toLocaleString("es-AR")} ARS`;
+
+          let tradeInDiffHtml = "";
+          if (appliedTradeIn && p.category === "equipos") {
+            const diffArs = Math.max(0, p.priceArs - appliedTradeIn.valueArs);
+            tradeInDiffHtml = `
+              <div class="mt-2 bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center justify-between">
+                <span>Con tu Canje pagás:</span>
+                <span>${formatMoney(diffArs)}</span>
+              </div>
+            `;
+          }
+
+          priceHtml = `
+            <div class="mt-4 pt-3 border-t border-gray-200/80">
+              <p class="text-2xl font-extrabold text-[#1D1D1F]">${mainPrice}</p>
+              <p class="text-[11px] text-gray-500 font-medium">${secondaryPrice}</p>
+              ${tradeInDiffHtml}
+            </div>
+          `;
+        } else {
+          priceHtml = `
+            <div class="mt-4 pt-3 border-t border-gray-200/80">
+              <p class="text-base font-extrabold text-[#1D1D1F]">Cotización a Pedido</p>
+              <p class="text-[11px] text-gray-500 font-medium">Traemos el color y GB que busques</p>
+            </div>
+          `;
+        }
+
+        const btnLabel = p.priceArs !== null ? "Agregar al Pedido" : "Consultar Ingreso";
+
+        return `
+          <div class="apple-card rounded-3xl p-5 flex flex-col justify-between border border-gray-200/60">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="${p.badgeColor} text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">${p.badge}</span>
+              </div>
+              <div class="aspect-square rounded-2xl bg-white overflow-hidden mb-4 flex items-center justify-center p-4">
+                <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl" />
+              </div>
+              <h3 class="font-bold text-base text-[#1D1D1F] leading-snug">${p.name}</h3>
+              <p class="text-xs font-semibold text-gray-600 mt-1">${p.condition}</p>
+              <p class="text-xs text-gray-500 mt-0.5">${p.specs}</p>
+              ${priceHtml}
+            </div>
+
+            <button onclick="addToCart('${p.id}')" class="mt-4 w-full bg-[#1D1D1F] text-white py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-black/80 transition">
+              ${btnLabel}
+            </button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // INICIALIZAR COTIZADOR PLAN CANJE
+    function initTradeIn() {
+      const sel = document.getElementById("ti-model");
+      sel.innerHTML = TRADEIN_MODELS.map((m, idx) =>
+        `<option value="${idx}" ${m.name.includes("iPhone 13 128GB") ? "selected" : ""}>${m.name} (Ref. Mayorista USD ${m.baseUsd})</option>`
+      ).join("");
+      calculateTradeIn();
+    }
+
+    function getCurrentTradeInQuote() {
+      const idx = Number(document.getElementById("ti-model").value || 0);
+      const batAdj = Number(document.getElementById("ti-battery").value || 0);
+      const condAdj = Number(document.getElementById("ti-condition").value || 0);
+      const model = TRADEIN_MODELS[idx];
+
+      // Si el modelo base ya contempla 80-89% en varios gama alta, ajustamos suave para que coincida con el PDF mayorista
+      const finalUsd = Math.max(120, model.baseUsd + batAdj + condAdj);
+      const finalArs = finalUsd * EXCHANGE_RATE;
+
+      const batText = document.getElementById("ti-battery").options[document.getElementById("ti-battery").selectedIndex].text;
+      const condText = document.getElementById("ti-condition").options[document.getElementById("ti-condition").selectedIndex].text;
+
+      return {
+        modelName: model.name,
+        battery: batText,
+        condition: condText,
+        valueUsd: finalUsd,
+        valueArs: finalArs
+      };
+    }
+
+    function calculateTradeIn() {
+      const q = getCurrentTradeInQuote();
+      document.getElementById("ti-result-ars").textContent = "$" + q.valueArs.toLocaleString("es-AR") + " ARS";
+      document.getElementById("ti-result-usd").textContent = `Equivalente a USD ${q.valueUsd} (TC $${EXCHANGE_RATE})`;
+
+      const diffS25 = Math.max(0, 1200000 - q.valueArs);
+      document.getElementById("ti-summary-Difference").innerHTML =
+        `💡 Por el <strong>Samsung S25 Ultra</strong> pagarías una diferencia aprox. de <strong>$${diffS25.toLocaleString("es-AR")}</strong>.`;
+    }
+
+    function applyTradeInToStore() {
+      appliedTradeIn = getCurrentTradeInQuote();
+      const banner = document.getElementById("tradein-active-banner");
+      const text = document.getElementById("tradein-banner-text");
+      banner.classList.remove("hidden");
+      text.textContent = `Canje aplicado: ${appliedTradeIn.modelName} (-$${appliedTradeIn.valueArs.toLocaleString("es-AR")} / USD ${appliedTradeIn.valueUsd})`;
+      renderProducts();
+      renderCart();
+      document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function clearTradeIn() {
+      appliedTradeIn = null;
+      document.getElementById("tradein-active-banner").classList.add("hidden");
+      renderProducts();
+      renderCart();
+    }
+
+    function sendTradeInWhatsApp() {
+      const q = getCurrentTradeInQuote();
+      const msg = `Hola Crisciphones! 👋 Quiero consultar por el *Plan Canje*.\n\n` +
+        `📱 *Mi equipo usado:* ${q.modelName}\n` +
+        `🔋 *Batería:* ${q.battery}\n` +
+        `✨ *Estado:* ${q.condition}\n` +
+        `💵 *Cotización web aprox:* $${q.valueArs.toLocaleString("es-AR")} ARS (USD ${q.valueUsd})\n\n` +
+        `¿Me confirmás qué diferencia tendría que pagar por los equipos que tenés en stock?`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+    }
+
+    // CARRITO DE COMPRAS
+    function addToCart(productId) {
+      const prod = PRODUCTS.find(p => p.id === productId);
+      if (!prod) return;
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...prod, qty: 1 });
+      }
+      renderCart();
+      toggleCart(true);
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      renderCart();
+    }
+
+    function toggleCart(open) {
+      const modal = document.getElementById("cart-modal");
+      if (open) modal.classList.remove("hidden");
+      else modal.classList.add("hidden");
+    }
+
+    function renderCart() {
+      const countEl = document.getElementById("cart-count");
+      const itemsEl = document.getElementById("cart-items");
+      const totalEl = document.getElementById("cart-total");
+      const tiBox = document.getElementById("cart-tradein-box");
+      const tiLabel = document.getElementById("cart-tradein-label");
+
+      const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
+      countEl.textContent = totalQty;
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = `<p class="text-xs text-gray-400 text-center py-10">Todavía no agregaste productos a tu pedido.</p>`;
+      } else {
+        itemsEl.innerHTML = cart.map(item => `
+          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3">
+            <div>
+              <h4 class="font-bold text-xs text-[#1D1D1F]">${item.name} (x${item.qty})</h4>
+              <p class="text-[11px] text-gray-500">${item.priceArs !== null ? formatMoney(item.priceArs * item.qty) : "A cotizar"}</p>
+            </div>
+            <button onclick="removeFromCart('${item.id}')" class="text-xs text-red-500 font-semibold hover:underline">Quitar</button>
+          </div>
+        `).join("");
+      }
+
+      let subtotalArs = cart.reduce((acc, i) => acc + ((i.priceArs || 0) * i.qty), 0);
+      if (appliedTradeIn) {
+        tiBox.classList.remove("hidden");
+        tiLabel.textContent = `Plan Canje: ${appliedTradeIn.modelName} (-${formatMoney(appliedTradeIn.valueArs)})`;
+        subtotalArs = Math.max(0, subtotalArs - appliedTradeIn.valueArs);
+      } else {
+        tiBox.classList.add("hidden");
+      }
+
+      totalEl.textContent = formatMoney(subtotalArs);
+    }
+
+    function checkoutWhatsApp() {
+      if (cart.length === 0) {
+        alert("Agregá al menos un equipo o accesorio para enviar tu pedido.");
+        return;
+      }
+      const payment = document.getElementById("cart-payment").value;
+      let lines = cart.map(i =>
+        `• ${i.qty}x *${i.name}* (${i.priceArs !== null ? "$" + (i.priceArs * i.qty).toLocaleString("es-AR") + " ARS" : "A cotizar"})`
+      ).join("\n");
+
+      let subtotalArs = cart.reduce((acc, i) => acc + ((i.priceArs || 0) * i.qty), 0);
+
+      let msg = `Hola Crisciphones! 👋 Quiero hacer este pedido desde la web:\n\n${lines}\n`;
+      if (appliedTradeIn) {
+        const diff = Math.max(0, subtotalArs - appliedTradeIn.valueArs);
+        msg += `\n🔄 *Entrego en Plan Canje:* ${appliedTradeIn.modelName} (${appliedTradeIn.battery}, ${appliedTradeIn.condition}) cotizado en aprox. $${appliedTradeIn.valueArs.toLocaleString("es-AR")} ARS (USD ${appliedTradeIn.valueUsd}).\n`;
+        msg += `💰 *Diferencia estimada a pagar:* $${diff.toLocaleString("es-AR")} ARS\n`;
+      } else if (subtotalArs > 0) {
+        msg += `\n💰 *Total estimado:* $${subtotalArs.toLocaleString("es-AR")} ARS (USD ${Math.round(subtotalArs / EXCHANGE_RATE)})\n`;
+      }
+      msg += `💳 *Forma de pago:* ${payment}`;
+
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+    }
+
+    // Iniciar tienda
+    initTradeIn();
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
