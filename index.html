@@ -426,7 +426,7 @@
      class="fixed bottom-5 right-5 z-40 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-lg hover:scale-105 transition flex items-center gap-2 font-bold text-xs">
     <span>💬 WhatsApp Directo</span>
   </a>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script>
     // CONFIGURACIÓN DE CRISCIPHONES
     const WHATSAPP_NUMBER = "5492634308126";
@@ -438,130 +438,25 @@
     let tradeInAlertShown = false; // Control de la alerta
 
     // CATÁLOGO REAL
-    const PRODUCTS = [
-      {
-        id: "eq-s25u",
-        name: "Samsung Galaxy S25 Ultra",
-        category: "equipos",
-        badge: "⚡ EN STOCK INMEDIATO",
-        badgeColor: "bg-green-100 text-green-800",
-        condition: "Usado Seleccionado • Impecable",
-        specs: "Color Blanco • 1 Unidad disponible",
-        priceArs: 1200000,
-        stock: 1,
-        image: "s25u.jpg",
-        images: ["s25u.jpg", "s25f.JPG", "s25ab.JPG"] // Array para la galería
-      },
-      {
-        id: "eq-13pro",
-        name: "iPhone 13 Pro 128GB",
-        category: "equipos",
-        badge: "⚡ EN STOCK INMEDIATO",
-        badgeColor: "bg-green-100 text-green-800",
-        condition: "Usado Seleccionado • Batería 79%",
-        specs: "Color Dorado (Gold) • 1 Unidad disponible",
-        priceArs: 630000,
-        stock: 1,
-        image: "iph13drd79.JPG",
-        images: ["iph13drd79.JPG", "iph13_lat.JPG", "iph13_back.jpg.JPG"] // Array para la galería
-      },
-      {
-        id: "acc-002",
-        name: "Cargador 20W USB-C (Calidad Original)",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (9 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo en caja",
-        specs: "Carga rápida 20W para iPhone",
-        priceArs: 32000,
-        stock: 9,
-        image: "cargador20wog.jpg"
-      },
-      {
-        id: "acc-005",
-        name: "Cargador 20W Réplica Apple",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (2 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo en caja",
-        specs: "Fuente de carga económica compatible",
-        priceArs: 15000,
-        stock: 2,
-        image: "cargador20w.jpg"
-      },
-      {
-        id: "acc-003",
-        name: "Cable USB-C para iPhone",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (5 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo",
-        specs: "Ficha Tipo C de carga rápida",
-        priceArs: 10000,
-        stock: 5,
-        image: "cablecac.jpg"
-      },
-      {
-        id: "acc-004",
-        name: "Cable Lightning para iPhone",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (3 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo",
-        specs: "Compatible con iPhone 11 al 14 Pro Max",
-        priceArs: 10000,
-        stock: 3,
-        image: "cablelng.jpg"
-      },
-      {
-        id: "ped-15",
-        name: "iPhone 15 128GB (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Seleccionado 90% a 100% Bat.",
-        specs: "Black / Blue / Pink • Consultá ingreso",
-        priceArs: null,
-        stock: 5,
-        image: "iph15bk.jpg"
-      },
-      {
-        id: "ped-16pro",
-        name: "iPhone 16 Pro 128GB / 256GB (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Seleccionado +90% Bat.",
-        specs: "Desert / Natural / Black / White",
-        priceArs: null,
-        stock: 5,
-        image: "iph16pds.jpg"
-      },
-      {
-        id: "ped-17",
-        name: "iPhone 17 256GB (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Open Box / 100% Batería",
-        specs: "Black / Mist Blue / Lavender / Sage",
-        priceArs: null,
-        stock: 5,
-        image: "iph17.jpg"
-      },
-      {
-        id: "ped-17pro",
-        name: "iPhone 17 Pro / Pro Max (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Open Box / Garantía Oficial Apple",
-        specs: "Cosmic Orange / Deep Blue / Silver",
-        priceArs: null,
-        stock: 5,
-        image: "iph17p.jpg"
-      }
-    ];
+   let PRODUCTS = [];
+const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTj1fphzTCrofnKHuruUZo4gStFdTI3U3m8DHW2w9sNJGTeo5rwctU-x7wyKypjjlZwOF_zda25f_jr/pub?output=csv";
+
+async function loadProducts() {
+  Papa.parse(SPREADSHEET_URL, {
+    download: true,
+    header: true,
+    dynamicTyping: true,
+    complete: function(results) {
+      PRODUCTS = results.data.map(p => ({
+        ...p,
+        images: p.images ? p.images.split(',').map(img => img.trim()) : [],
+        priceArs: p.priceArs === "" ? null : Number(p.priceArs)
+      })).filter(p => p.id);
+
+      renderProducts();
+    }
+  });
+}
 
     const TRADEIN_MODELS = [
       { name: "iPhone 13 Mini 128GB", baseUsd: 265 },
