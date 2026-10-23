@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crisciphones | Equipos Seleccionados, Importados & Plan Canje</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lector de Google Sheets (PapaParse) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -167,42 +165,6 @@
     </div>
   </div>
 
-  <!-- BANNER LANZAMIENTO IPHONE 18 PRO CON VIDEO DE FONDO -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-4">
-    <div class="relative rounded-3xl p-6 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border border-gray-200/50 overflow-hidden min-h-[260px]">
-      
-      <!-- Video de fondo -->
-      <div class="absolute inset-0 z-0">
-        <video autoplay loop muted playsinline class="w-full h-full object-cover object-center pointer-events-none">
-          <source src="video18p.mp4" type="video/mp4">
-        </video>
-        <!-- Filtro oscuro -->
-        <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/90 via-black/60 to-black/20"></div>
-      </div>
-      
-      <!-- Contenido del texto -->
-      <div class="relative z-10 text-center md:text-left md:max-w-xl w-full">
-        <span class="inline-block bg-white/20 text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest mb-3 border border-white/30 backdrop-blur-md shadow-sm">
-          🌟 Novedad Exclusiva
-        </span>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight drop-shadow-lg">
-          iPhone 18 Pro & Pro Max
-        </h2>
-        <p class="text-sm sm:text-base text-gray-200 mt-3 font-medium drop-shadow-md leading-relaxed">
-          Sé de los primeros en tenerlo. Ya estamos tomando reservas con ingresos a pedido al <strong class="text-white">mejor precio del mercado</strong>.
-        </p>
-      </div>
-      
-      <!-- Botón de acción -->
-      <div class="relative z-10 w-full md:w-auto flex-shrink-0 mt-2 md:mt-0">
-        <a href="https://wa.me/5492634308126?text=Hola%20Crisciphones!%20Quiero%20consultar%20para%20encargar%20el%20nuevo%20iPhone%2018%20Pro/Pro%20Max." target="_blank" 
-           class="block w-full md:w-auto text-center bg-white text-[#1D1D1F] px-8 py-4 rounded-2xl text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-gray-100 transition-all hover:scale-105 shadow-xl">
-          Encargar Ahora
-        </a>
-      </div>
-    </div>
-  </section>
-  
   <!-- SECCIÓN CATÁLOGO -->
   <section id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
@@ -233,7 +195,7 @@
       <!-- Renderizado por JS -->
     </div>
   </section>
-  
+
   <!-- SIMULADOR DE PLAN CANJE -->
   <section id="plan-canje" class="bg-[#F5F5F7] border-y border-gray-200/80 py-16">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -247,6 +209,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 items-center">
+          <!-- Controles de Selección -->
           <div class="md:col-span-2 space-y-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">1. Tu modelo de iPhone actual</label>
@@ -280,6 +243,7 @@
             </p>
           </div>
 
+          <!-- Resultado de la Cotización -->
           <div class="bg-[#1D1D1F] text-white rounded-2xl p-6 flex flex-col justify-between">
             <div>
               <span class="text-[11px] uppercase tracking-widest text-gray-400 font-semibold">Valor estimado de toma</span>
@@ -352,24 +316,32 @@
     </div>
   </footer>
 
-  <!-- MODAL DETALLE DE PRODUCTO -->
+  <!-- MODAL DETALLE DE PRODUCTO (PARA EQUIPOS EN STOCK) -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden">
+    <!-- Fondo oscuro -->
     <div onclick="closeProductModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
     
     <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
       <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row pointer-events-auto relative">
+        
+        <!-- Botón cerrar -->
         <button onclick="closeProductModal()" class="absolute top-4 right-4 z-20 w-8 h-8 bg-black/10 rounded-full flex items-center justify-center text-black hover:bg-black/20 transition backdrop-blur-md">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
+        <!-- Sección de Imágenes -->
         <div class="w-full md:w-1/2 bg-gray-100 flex flex-col relative h-[40vh] md:h-auto">
+          <!-- Imagen Principal -->
           <div class="flex-1 w-full bg-white relative flex items-center justify-center overflow-hidden">
             <img id="modal-main-img" src="" class="object-cover w-full h-full" alt="Imagen principal del equipo" />
           </div>
+          <!-- Miniaturas -->
           <div id="modal-thumbnails" class="flex gap-3 p-4 bg-gray-50 overflow-x-auto no-scrollbar border-t border-gray-200">
+            <!-- Las miniaturas se inyectan acá vía JS -->
           </div>
         </div>
 
+        <!-- Información del Equipo -->
         <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto">
           <div>
             <span id="modal-badge" class="inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3"></span>
@@ -387,6 +359,8 @@
               <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-1">Precio de lista</p>
               <p id="modal-price" class="text-4xl font-extrabold text-[#1D1D1F] tracking-tight"></p>
               <p id="modal-price-sub" class="text-sm text-gray-500 font-medium mt-1"></p>
+              
+              <!-- Div para mostrar si hay plan canje aplicado -->
               <div id="modal-tradein-diff" class="mt-4"></div>
             </div>
           </div>
@@ -398,6 +372,7 @@
             <p class="text-center text-[11px] text-gray-400 font-medium mt-2">Podrás elegir el medio de pago antes de confirmar.</p>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -414,8 +389,10 @@
         <button onclick="toggleCart(false)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-black">✕</button>
       </div>
 
+      <!-- Items del Carrito -->
       <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
 
+      <!-- Resumen e Checkout -->
       <div class="p-5 bg-[#F5F5F7] border-t border-gray-200 space-y-3">
         <div id="cart-tradein-box" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 flex items-center justify-between">
           <span id="cart-tradein-label">Plan Canje aplicado</span>
@@ -444,22 +421,147 @@
     </div>
   </div>
 
+  <!-- BOTÓN FLOTANTE DE WHATSAPP -->
   <a href="https://wa.me/5492634308126?text=Hola%20Crisciphones!%20Vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank"
      class="fixed bottom-5 right-5 z-40 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-lg hover:scale-105 transition flex items-center gap-2 font-bold text-xs">
     <span>💬 WhatsApp Directo</span>
   </a>
 
   <script>
+    // CONFIGURACIÓN DE CRISCIPHONES
     const WHATSAPP_NUMBER = "5492634308126";
     const EXCHANGE_RATE = 1570;
     let currentCurrency = "ARS";
     let currentCategory = "all";
     let cart = [];
     let appliedTradeIn = null;
-    let tradeInAlertShown = false;
-    let PRODUCTS = [];
-    
-    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1qUcwBXsde8SrdS4F8KQfhQ1nwh0UCk_XhiydCGr6s70/pub?output=csv";
+    let tradeInAlertShown = false; // Control de la alerta
+
+    // CATÁLOGO REAL
+    const PRODUCTS = [
+      {
+        id: "eq-s25u",
+        name: "Samsung Galaxy S25 Ultra",
+        category: "equipos",
+        badge: "⚡ EN STOCK INMEDIATO",
+        badgeColor: "bg-green-100 text-green-800",
+        condition: "Usado Seleccionado • Impecable",
+        specs: "Color Blanco • 1 Unidad disponible",
+        priceArs: 1200000,
+        stock: 1,
+        image: "s25u.jpg",
+        images: ["s25u.jpg", "s25u_lat.jpg", "s25u_back.jpg"] // Array para la galería
+      },
+      {
+        id: "eq-13pro",
+        name: "iPhone 13 Pro 128GB",
+        category: "equipos",
+        badge: "⚡ EN STOCK INMEDIATO",
+        badgeColor: "bg-green-100 text-green-800",
+        condition: "Usado Seleccionado • Batería 79%",
+        specs: "Color Dorado (Gold) • 1 Unidad disponible",
+        priceArs: 630000,
+        stock: 1,
+        image: "iph13drd79.JPG",
+        images: ["iph13drd79.JPG", "iph13_lat.jpg", "iph13_back.jpg"] // Array para la galería
+      },
+      {
+        id: "acc-002",
+        name: "Cargador 20W USB-C (Calidad Original)",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (9 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo en caja",
+        specs: "Carga rápida 20W para iPhone",
+        priceArs: 32000,
+        stock: 9,
+        image: "cargador20wog.jpg"
+      },
+      {
+        id: "acc-005",
+        name: "Cargador 20W Réplica Apple",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (2 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo en caja",
+        specs: "Fuente de carga económica compatible",
+        priceArs: 15000,
+        stock: 2,
+        image: "cargador20w.jpg"
+      },
+      {
+        id: "acc-003",
+        name: "Cable USB-C para iPhone",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (5 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo",
+        specs: "Ficha Tipo C de carga rápida",
+        priceArs: 10000,
+        stock: 5,
+        image: "cablecac.jpg"
+      },
+      {
+        id: "acc-004",
+        name: "Cable Lightning para iPhone",
+        category: "accesorios",
+        badge: "🔌 EN STOCK (3 unid.)",
+        badgeColor: "bg-gray-200 text-gray-800",
+        condition: "Nuevo",
+        specs: "Compatible con iPhone 11 al 14 Pro Max",
+        priceArs: 10000,
+        stock: 3,
+        image: "cablelng.jpg"
+      },
+      {
+        id: "ped-15",
+        name: "iPhone 15 128GB (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Seleccionado 90% a 100% Bat.",
+        specs: "Black / Blue / Pink • Consultá ingreso",
+        priceArs: null,
+        stock: 5,
+        image: "iph15bk.jpg"
+      },
+      {
+        id: "ped-16pro",
+        name: "iPhone 16 Pro 128GB / 256GB (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Seleccionado +90% Bat.",
+        specs: "Desert / Natural / Black / White",
+        priceArs: null,
+        stock: 5,
+        image: "iph16pds.jpg"
+      },
+      {
+        id: "ped-17",
+        name: "iPhone 17 256GB (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Open Box / 100% Batería",
+        specs: "Black / Mist Blue / Lavender / Sage",
+        priceArs: null,
+        stock: 5,
+        image: "iph17.jpg"
+      },
+      {
+        id: "ped-17pro",
+        name: "iPhone 17 Pro / Pro Max (A Pedido)",
+        category: "pedido",
+        badge: "📦 DISPONIBLE POR ENCARGO",
+        badgeColor: "bg-blue-50 text-blue-700",
+        condition: "Open Box / Garantía Oficial Apple",
+        specs: "Cosmic Orange / Deep Blue / Silver",
+        priceArs: null,
+        stock: 5,
+        image: "iph17p.jpg"
+      }
+    ];
 
     const TRADEIN_MODELS = [
       { name: "iPhone 13 Mini 128GB", baseUsd: 265 },
@@ -527,6 +629,7 @@
       renderProducts();
     }
 
+    // MODAL DE DETALLE DE EQUIPO
     function openProductModal(productId) {
       const p = PRODUCTS.find(x => x.id === productId);
       if(!p) return;
@@ -534,6 +637,7 @@
       const modal = document.getElementById("product-modal");
       modal.classList.remove("hidden");
       
+      // Textos y etiquetas
       const badge = document.getElementById("modal-badge");
       badge.className = p.badgeColor + " inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3";
       badge.textContent = p.badge;
@@ -542,6 +646,7 @@
       document.getElementById("modal-condition").textContent = p.condition;
       document.getElementById("modal-specs").textContent = p.specs;
       
+      // Galería de Imágenes
       document.getElementById("modal-main-img").src = p.image;
       const thumbsContainer = document.getElementById("modal-thumbnails");
       
@@ -551,9 +656,10 @@
                class="w-20 h-20 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-black opacity-80 hover:opacity-100 transition shadow-sm" />
         `).join("");
       } else {
-        thumbsContainer.innerHTML = "";
+        thumbsContainer.innerHTML = ""; // Sin extras
       }
 
+      // Precios
       const priceEl = document.getElementById("modal-price");
       const subPriceEl = document.getElementById("modal-price-sub");
       const tradeInDiv = document.getElementById("modal-tradein-diff");
@@ -575,12 +681,9 @@
         } else {
           tradeInDiv.innerHTML = "";
         }
-      } else {
-        priceEl.textContent = "A Pedido";
-        subPriceEl.textContent = "";
-        tradeInDiv.innerHTML = "";
       }
       
+      // Botón de acción
       const btn = document.getElementById("modal-add-btn");
       btn.onclick = () => {
         addToCart(p.id);
@@ -636,6 +739,7 @@
         let buttonHtml = "";
         let imgTag = `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl" />`;
         
+        // Cambiar lógica de botón e imagen según sea equipo o accesorio/pedido
         if (p.category === "equipos") {
           imgTag = `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl cursor-pointer hover:scale-110 transition duration-500" onclick="openProductModal('${p.id}')" />`;
           buttonHtml = `
@@ -701,6 +805,7 @@
       };
     }
 
+    // Se agregó el parámetro isUserAction para disparar la alerta solo cuando interactúa
     function calculateTradeIn(isUserAction) {
       const q = getCurrentTradeInQuote();
       document.getElementById("ti-result-ars").textContent = "$" + q.valueArs.toLocaleString("es-AR") + " ARS";
@@ -710,10 +815,12 @@
       document.getElementById("ti-summary-Difference").innerHTML =
         `💡 Por el <strong>Samsung S25 Ultra</strong> pagarías una diferencia aprox. de <strong>$${diffS25.toLocaleString("es-AR")}</strong>.`;
 
+      // Mostrar Alerta (Toast) la primera vez que interactúa
       if(isUserAction && !tradeInAlertShown) {
         const toast = document.getElementById("toast-alert");
         toast.classList.remove("hidden");
         toast.classList.add("flex");
+        // Auto ocultar después de 6 segundos
         setTimeout(() => {
           toast.classList.add("hidden");
           toast.classList.remove("flex");
@@ -836,37 +943,10 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    function loadProductsFromSheets() {
-      Papa.parse(SHEET_CSV_URL, {
-        download: true,
-        header: true,
-        dynamicTyping: true, 
-        complete: function(results) {
-          PRODUCTS = results.data
-            .filter(item => item.id)
-            .map(p => {
-              if (p.images && typeof p.images === 'string') {
-                p.images = p.images.split(',').map(img => img.trim());
-              } else {
-                p.images = [];
-              }
-              if (p.priceArs === "" || p.priceArs === undefined || p.priceArs === null) {
-                p.priceArs = null;
-              }
-              return p;
-            });
-
-          initTradeIn();
-          renderProducts();
-          renderCart();
-        },
-        error: function(err) {
-          console.error("Error al cargar la planilla:", err);
-        }
-      });
-    }
-
-    loadProductsFromSheets();
+    // Iniciar tienda
+    initTradeIn();
+    renderProducts();
+    renderCart();
   </script>
 </body>
 </html>
