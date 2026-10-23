@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crisciphones | Equipos Seleccionados, Importados & Plan Canje</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lector de Google Sheets (PapaParse) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -473,133 +475,13 @@
     let currentCategory = "all";
     let cart = [];
     let appliedTradeIn = null;
-    let tradeInAlertShown = false; // Control de la alerta
+    let tradeInAlertShown = false;
 
-    // CATÁLOGO REAL
-    const PRODUCTS = [
-      {
-        id: "eq-s25u",
-        name: "Samsung Galaxy S25 Ultra",
-        category: "equipos",
-        badge: "⚡ EN STOCK INMEDIATO",
-        badgeColor: "bg-green-100 text-green-800",
-        condition: "Usado Seleccionado • Impecable",
-        specs: "Color Blanco • 1 Unidad disponible",
-        priceArs: 1200000,
-        stock: 1,
-        image: "s25u.jpg",
-        images: ["s25u.jpg", "s25f.JPG", "s25ab.JPG"] // Array para la galería
-      },
-      {
-        id: "eq-13pro",
-        name: "iPhone 13 Pro 128GB",
-        category: "equipos",
-        badge: "⚡ EN STOCK INMEDIATO",
-        badgeColor: "bg-green-100 text-green-800",
-        condition: "Usado Seleccionado • Batería 79%",
-        specs: "Color Dorado (Gold) • 1 Unidad disponible",
-        priceArs: 630000,
-        stock: 1,
-        image: "iph13drd79.JPG",
-        images: ["iph13drd79.JPG", "iph13_lat.JPG", "iph13_back.jpg.JPG"] // Array para la galería
-      },
-      {
-        id: "acc-002",
-        name: "Cargador 20W USB-C (Calidad Original)",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (9 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo en caja",
-        specs: "Carga rápida 20W para iPhone",
-        priceArs: 32000,
-        stock: 9,
-        image: "cargador20wog.jpg"
-      },
-      {
-        id: "acc-005",
-        name: "Cargador 20W Réplica Apple",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (2 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo en caja",
-        specs: "Fuente de carga económica compatible",
-        priceArs: 15000,
-        stock: 2,
-        image: "cargador20w.jpg"
-      },
-      {
-        id: "acc-003",
-        name: "Cable USB-C para iPhone",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (5 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo",
-        specs: "Ficha Tipo C de carga rápida",
-        priceArs: 10000,
-        stock: 5,
-        image: "cablecac.jpg"
-      },
-      {
-        id: "acc-004",
-        name: "Cable Lightning para iPhone",
-        category: "accesorios",
-        badge: "🔌 EN STOCK (3 unid.)",
-        badgeColor: "bg-gray-200 text-gray-800",
-        condition: "Nuevo",
-        specs: "Compatible con iPhone 11 al 14 Pro Max",
-        priceArs: 10000,
-        stock: 3,
-        image: "cablelng.jpg"
-      },
-      {
-        id: "ped-15",
-        name: "iPhone 15 128GB (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Seleccionado 90% a 100% Bat.",
-        specs: "Black / Blue / Pink • Consultá ingreso",
-        priceArs: null,
-        stock: 5,
-        image: "iph15bk.jpg"
-      },
-      {
-        id: "ped-16pro",
-        name: "iPhone 16 Pro 128GB / 256GB (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Seleccionado +90% Bat.",
-        specs: "Desert / Natural / Black / White",
-        priceArs: null,
-        stock: 5,
-        image: "iph16pds.jpg"
-      },
-      {
-        id: "ped-17",
-        name: "iPhone 17 256GB (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Open Box / 100% Batería",
-        specs: "Black / Mist Blue / Lavender / Sage",
-        priceArs: null,
-        stock: 5,
-        image: "iph17.jpg"
-      },
-      {
-        id: "ped-17pro",
-        name: "iPhone 17 Pro / Pro Max (A Pedido)",
-        category: "pedido",
-        badge: "📦 DISPONIBLE POR ENCARGO",
-        badgeColor: "bg-blue-50 text-blue-700",
-        condition: "Open Box / Garantía Oficial Apple",
-        specs: "Cosmic Orange / Deep Blue / Silver",
-        priceArs: null,
-        stock: 5,
-        image: "iph17p.jpg"
-      }
-    ];
+    // CATÁLOGO DINÁMICO (Google Sheets)
+    let PRODUCTS = [];
+    
+    // Este enlace lee el CSV público de la planilla que creamos
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1qUcwBXsde8SrdS4F8KQfhQ1nwh0UCk_XhiydCGr6s70/pub?output=csv";
 
     const TRADEIN_MODELS = [
       { name: "iPhone 13 Mini 128GB", baseUsd: 265 },
@@ -694,7 +576,7 @@
                class="w-20 h-20 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-black opacity-80 hover:opacity-100 transition shadow-sm" />
         `).join("");
       } else {
-        thumbsContainer.innerHTML = ""; // Sin extras
+        thumbsContainer.innerHTML = "";
       }
 
       // Precios
@@ -777,7 +659,6 @@
         let buttonHtml = "";
         let imgTag = `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl" />`;
         
-        // Cambiar lógica de botón e imagen según sea equipo o accesorio/pedido
         if (p.category === "equipos") {
           imgTag = `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl cursor-pointer hover:scale-110 transition duration-500" onclick="openProductModal('${p.id}')" />`;
           buttonHtml = `
@@ -843,7 +724,6 @@
       };
     }
 
-    // Se agregó el parámetro isUserAction para disparar la alerta solo cuando interactúa
     function calculateTradeIn(isUserAction) {
       const q = getCurrentTradeInQuote();
       document.getElementById("ti-result-ars").textContent = "$" + q.valueArs.toLocaleString("es-AR") + " ARS";
@@ -853,12 +733,10 @@
       document.getElementById("ti-summary-Difference").innerHTML =
         `💡 Por el <strong>Samsung S25 Ultra</strong> pagarías una diferencia aprox. de <strong>$${diffS25.toLocaleString("es-AR")}</strong>.`;
 
-      // Mostrar Alerta (Toast) la primera vez que interactúa
       if(isUserAction && !tradeInAlertShown) {
         const toast = document.getElementById("toast-alert");
         toast.classList.remove("hidden");
         toast.classList.add("flex");
-        // Auto ocultar después de 6 segundos
         setTimeout(() => {
           toast.classList.add("hidden");
           toast.classList.remove("flex");
@@ -981,10 +859,42 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    // Iniciar tienda
-    initTradeIn();
-    renderProducts();
-    renderCart();
+    // CARGAR LOS DATOS DESDE EL GOOGLE SHEETS
+    function loadProductsFromSheets() {
+      Papa.parse(SHEET_CSV_URL, {
+        download: true,
+        header: true,
+        dynamicTyping: true, // Convierte números automáticamente
+        complete: function(results) {
+          PRODUCTS = results.data
+            .filter(item => item.id) // Ignorar filas vacías
+            .map(p => {
+              // Procesar galería de imágenes (separadas por comas)
+              if (p.images && typeof p.images === 'string') {
+                p.images = p.images.split(',').map(img => img.trim());
+              } else {
+                p.images = [];
+              }
+              // Manejar precios a cotizar
+              if (p.priceArs === "" || p.priceArs === undefined) {
+                p.priceArs = null;
+              }
+              return p;
+            });
+
+          // Iniciar la tienda después de obtener los datos
+          initTradeIn();
+          renderProducts();
+          renderCart();
+        },
+        error: function(err) {
+          console.error("Error al cargar la planilla:", err);
+        }
+      });
+    }
+
+    // Ejecutar la lectura inicial
+    loadProductsFromSheets();
   </script>
 </body>
 </html>
