@@ -174,11 +174,9 @@
       <!-- Video de fondo -->
       <div class="absolute inset-0 z-0">
         <video autoplay loop muted playsinline class="w-full h-full object-cover object-center pointer-events-none">
-          <!-- Asegúrate de tener el archivo de video descargado en tu carpeta -->
           <source src="video18p.mp4" type="video/mp4">
         </video>
-        
-        <!-- Filtro oscuro (overlay) para asegurar que el texto blanco resalte sobre el video -->
+        <!-- Filtro oscuro -->
         <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/90 via-black/60 to-black/20"></div>
       </div>
       
@@ -249,7 +247,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 items-center">
-          <!-- Controles de Selección -->
           <div class="md:col-span-2 space-y-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">1. Tu modelo de iPhone actual</label>
@@ -283,7 +280,6 @@
             </p>
           </div>
 
-          <!-- Resultado de la Cotización -->
           <div class="bg-[#1D1D1F] text-white rounded-2xl p-6 flex flex-col justify-between">
             <div>
               <span class="text-[11px] uppercase tracking-widest text-gray-400 font-semibold">Valor estimado de toma</span>
@@ -356,32 +352,24 @@
     </div>
   </footer>
 
-  <!-- MODAL DETALLE DE PRODUCTO (PARA EQUIPOS EN STOCK) -->
+  <!-- MODAL DETALLE DE PRODUCTO -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden">
-    <!-- Fondo oscuro -->
     <div onclick="closeProductModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
     
     <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
       <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row pointer-events-auto relative">
-        
-        <!-- Botón cerrar -->
         <button onclick="closeProductModal()" class="absolute top-4 right-4 z-20 w-8 h-8 bg-black/10 rounded-full flex items-center justify-center text-black hover:bg-black/20 transition backdrop-blur-md">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
-        <!-- Sección de Imágenes -->
         <div class="w-full md:w-1/2 bg-gray-100 flex flex-col relative h-[40vh] md:h-auto">
-          <!-- Imagen Principal -->
           <div class="flex-1 w-full bg-white relative flex items-center justify-center overflow-hidden">
             <img id="modal-main-img" src="" class="object-cover w-full h-full" alt="Imagen principal del equipo" />
           </div>
-          <!-- Miniaturas -->
           <div id="modal-thumbnails" class="flex gap-3 p-4 bg-gray-50 overflow-x-auto no-scrollbar border-t border-gray-200">
-            <!-- Las miniaturas se inyectan acá vía JS -->
           </div>
         </div>
 
-        <!-- Información del Equipo -->
         <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto">
           <div>
             <span id="modal-badge" class="inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3"></span>
@@ -399,8 +387,6 @@
               <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-1">Precio de lista</p>
               <p id="modal-price" class="text-4xl font-extrabold text-[#1D1D1F] tracking-tight"></p>
               <p id="modal-price-sub" class="text-sm text-gray-500 font-medium mt-1"></p>
-              
-              <!-- Div para mostrar si hay plan canje aplicado -->
               <div id="modal-tradein-diff" class="mt-4"></div>
             </div>
           </div>
@@ -412,7 +398,6 @@
             <p class="text-center text-[11px] text-gray-400 font-medium mt-2">Podrás elegir el medio de pago antes de confirmar.</p>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -429,10 +414,8 @@
         <button onclick="toggleCart(false)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-black">✕</button>
       </div>
 
-      <!-- Items del Carrito -->
       <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
 
-      <!-- Resumen e Checkout -->
       <div class="p-5 bg-[#F5F5F7] border-t border-gray-200 space-y-3">
         <div id="cart-tradein-box" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 flex items-center justify-between">
           <span id="cart-tradein-label">Plan Canje aplicado</span>
@@ -461,14 +444,12 @@
     </div>
   </div>
 
-  <!-- BOTÓN FLOTANTE DE WHATSAPP -->
   <a href="https://wa.me/5492634308126?text=Hola%20Crisciphones!%20Vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20hacer%20una%20consulta." target="_blank"
      class="fixed bottom-5 right-5 z-40 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-lg hover:scale-105 transition flex items-center gap-2 font-bold text-xs">
     <span>💬 WhatsApp Directo</span>
   </a>
 
   <script>
-    // CONFIGURACIÓN DE CRISCIPHONES
     const WHATSAPP_NUMBER = "5492634308126";
     const EXCHANGE_RATE = 1570;
     let currentCurrency = "ARS";
@@ -476,12 +457,9 @@
     let cart = [];
     let appliedTradeIn = null;
     let tradeInAlertShown = false;
-
-    // CATÁLOGO DINÁMICO (Google Sheets)
     let PRODUCTS = [];
     
-    // Este enlace lee el CSV público de la planilla que creamos
-    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTj1fphzTCrofnKHuruUZo4gStFdTI3U3m8DHW2w9sNJGTeo5rwctU-x7wyKypjjlZwOF_zda25f_jr/pubhtml";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1qUcwBXsde8SrdS4F8KQfhQ1nwh0UCk_XhiydCGr6s70/pub?output=csv";
 
     const TRADEIN_MODELS = [
       { name: "iPhone 13 Mini 128GB", baseUsd: 265 },
@@ -549,7 +527,6 @@
       renderProducts();
     }
 
-    // MODAL DE DETALLE DE EQUIPO
     function openProductModal(productId) {
       const p = PRODUCTS.find(x => x.id === productId);
       if(!p) return;
@@ -557,7 +534,6 @@
       const modal = document.getElementById("product-modal");
       modal.classList.remove("hidden");
       
-      // Textos y etiquetas
       const badge = document.getElementById("modal-badge");
       badge.className = p.badgeColor + " inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3";
       badge.textContent = p.badge;
@@ -566,7 +542,6 @@
       document.getElementById("modal-condition").textContent = p.condition;
       document.getElementById("modal-specs").textContent = p.specs;
       
-      // Galería de Imágenes
       document.getElementById("modal-main-img").src = p.image;
       const thumbsContainer = document.getElementById("modal-thumbnails");
       
@@ -579,7 +554,6 @@
         thumbsContainer.innerHTML = "";
       }
 
-      // Precios
       const priceEl = document.getElementById("modal-price");
       const subPriceEl = document.getElementById("modal-price-sub");
       const tradeInDiv = document.getElementById("modal-tradein-diff");
@@ -601,9 +575,12 @@
         } else {
           tradeInDiv.innerHTML = "";
         }
+      } else {
+        priceEl.textContent = "A Pedido";
+        subPriceEl.textContent = "";
+        tradeInDiv.innerHTML = "";
       }
       
-      // Botón de acción
       const btn = document.getElementById("modal-add-btn");
       btn.onclick = () => {
         addToCart(p.id);
@@ -859,30 +836,26 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    // CARGAR LOS DATOS DESDE EL GOOGLE SHEETS
     function loadProductsFromSheets() {
       Papa.parse(SHEET_CSV_URL, {
         download: true,
         header: true,
-        dynamicTyping: true, // Convierte números automáticamente
+        dynamicTyping: true, 
         complete: function(results) {
           PRODUCTS = results.data
-            .filter(item => item.id) // Ignorar filas vacías
+            .filter(item => item.id)
             .map(p => {
-              // Procesar galería de imágenes (separadas por comas)
               if (p.images && typeof p.images === 'string') {
                 p.images = p.images.split(',').map(img => img.trim());
               } else {
                 p.images = [];
               }
-              // Manejar precios a cotizar
-              if (p.priceArs === "" || p.priceArs === undefined) {
+              if (p.priceArs === "" || p.priceArs === undefined || p.priceArs === null) {
                 p.priceArs = null;
               }
               return p;
             });
 
-          // Iniciar la tienda después de obtener los datos
           initTradeIn();
           renderProducts();
           renderCart();
@@ -893,7 +866,6 @@
       });
     }
 
-    // Ejecutar la lectura inicial
     loadProductsFromSheets();
   </script>
 </body>
