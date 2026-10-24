@@ -415,20 +415,27 @@
     </div>
   </footer>
 
-  <!-- MODAL DETALLE DE PRODUCTO -->
+ <!-- MODAL DETALLE DE PRODUCTO -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden">
     <div onclick="closeProductModal()" class="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm transition-opacity"></div>
-    <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    
+    <!-- Cambié p-4 por p-5 para darle más aire a los costados en móvil -->
+    <div class="fixed inset-0 flex items-center justify-center p-5 sm:p-6 pointer-events-none">
       <div class="bg-white dark:bg-[#1C1C1E] rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row pointer-events-auto relative border border-transparent dark:border-gray-800">
         
         <button onclick="closeProductModal()" class="absolute top-4 right-4 z-20 w-8 h-8 bg-black/10 dark:bg-white/10 rounded-full flex items-center justify-center text-black dark:text-white hover:bg-black/20 dark:hover:bg-white/20 transition backdrop-blur-md">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
-        <div class="w-full md:w-1/2 bg-gray-100 dark:bg-[#000000] flex flex-col relative h-[40vh] md:h-auto">
-          <div class="flex-1 w-full bg-white dark:bg-black relative flex items-center justify-center overflow-hidden">
-            <img id="modal-main-img" src="" class="object-cover w-full h-full" alt="Imagen principal" />
+        <!-- Aumenté la altura a 45vh en móvil para que la foto tenga más espacio -->
+        <div class="w-full md:w-1/2 bg-gray-100 dark:bg-[#000000] flex flex-col relative h-[45vh] md:h-auto">
+          
+          <!-- Agregué p-4 acá para que la foto no toque los bordes laterales -->
+          <div class="flex-1 w-full bg-white dark:bg-black relative flex items-center justify-center p-4 overflow-hidden">
+            <!-- CAMBIO CLAVE: object-contain para que no corte la foto -->
+            <img id="modal-main-img" src="" class="object-contain w-full h-full drop-shadow-sm" alt="Imagen principal" />
           </div>
+
           <div id="modal-thumbnails" class="flex gap-3 p-4 bg-gray-50 dark:bg-[#000000] overflow-x-auto no-scrollbar border-t border-gray-200 dark:border-gray-800"></div>
         </div>
         
@@ -778,7 +785,7 @@
       if (p.images && p.images.length > 0) {
         thumbsContainer.innerHTML = p.images.map(img => `
           <img src="${img}" onclick="document.getElementById('modal-main-img').src='${img}'" 
-               class="w-20 h-20 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-black dark:hover:border-white opacity-80 hover:opacity-100 transition shadow-sm" />
+               class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-black dark:hover:border-white opacity-80 hover:opacity-100 transition shadow-sm" />
         `).join("");
       } else {
         thumbsContainer.innerHTML = ""; 
