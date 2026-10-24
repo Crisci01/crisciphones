@@ -866,11 +866,10 @@ async function loadProducts() {
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-async function iniciarTienda() {
-  initTradeIn();
-  await obtenerDolarBlue(); // 1. Espera a tener el precio del dólar real
-  loadProducts();           // 2. Descarga el Excel (acá ya podés usar la variable cotizacionDolarVenta)
-  renderCart();
-}
-
-iniciarTienda();
+ // Iniciar tienda
+    initTradeIn();
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
