@@ -196,74 +196,100 @@
     </div>
   </section>
 
-  <!-- SIMULADOR DE PLAN CANJE -->
+ <!-- SIMULADOR DE PLAN CANJE (ESTILO WIZARD INTERACTIVO) -->
   <section id="plan-canje" class="bg-[#F5F5F7] border-y border-gray-200/80 py-16">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-200/80">
-        <div class="max-w-2xl">
-          <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cotizador Online Oficial</span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-3">Simulá tu Plan Canje en segundos</h2>
-          <p class="text-sm text-gray-600 mt-2">
-            Seleccioná el modelo de iPhone que tenés hoy, su condición y porcentaje de batería. Calculamos el valor de toma de referencia (en USD y Pesos al cambio de <strong>$<span id="sim-rate-label">...</span></strong>) para que veas qué diferencia tenés que pagar por otro equipo.
-          </p>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cotizador Interactivo</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-4">Cotizá tu equipo al instante</h2>
+        <p class="text-gray-600 mt-3 text-sm">Completá estos 3 simples pasos para saber cuánto vale tu iPhone actual y usalo como parte de pago.</p>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative min-h-[400px]">
+        
+        <!-- BARRA DE PROGRESO -->
+        <div class="bg-gray-100 h-1.5 w-full absolute top-0 left-0">
+          <div id="ti-progress" class="bg-blue-600 h-1.5 w-1/4 transition-all duration-500"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 items-center">
-          <!-- Controles de Selección -->
-          <div class="md:col-span-2 space-y-4">
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">1. Tu modelo de iPhone actual</label>
-              <select id="ti-model" onchange="calculateTradeIn(true)" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
-                <!-- Opciones cargadas desde el PDF Mayorista -->
-              </select>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">2. Condición de Batería</label>
-                <select id="ti-battery" onchange="calculateTradeIn(true)" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
-                  <option value="0">90% a 100% (Óptima)</option>
-                  <option value="-15" selected>80% a 89% (Normal)</option>
-                  <option value="-35">Menos de 80% (Servicio / Cambio)</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">3. Estado Estético / Funcional</label>
-                <select id="ti-condition" onchange="calculateTradeIn(true)" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:border-black">
-                  <option value="0" selected>Impecable (Todo original sin detalles)</option>
-                  <option value="-30">Detalles estéticos leves de uso</option>
-                  <option value="-75">Detalle en cámara (ej. x0.5 / x3) o pantalla</option>
-                </select>
-              </div>
-            </div>
-
-            <p class="text-[11px] text-gray-400 leading-relaxed">
-              * Cotización sujeta a revisión física presencial del equipo (Face ID funcionando, sin cuenta iCloud bloqueada, pantalla y cámaras verificadas).
-            </p>
+        <!-- PASO 1: MODELO -->
+        <div id="step-1" class="ti-step p-6 sm:p-10 transition-all duration-500">
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">1. ¿Qué modelo tenés?</h3>
+          <div id="ti-model-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+            <!-- Botones generados por JS -->
           </div>
+        </div>
 
-          <!-- Resultado de la Cotización -->
-          <div class="bg-[#1D1D1F] text-white rounded-2xl p-6 flex flex-col justify-between">
-            <div>
-              <span class="text-[11px] uppercase tracking-widest text-gray-400 font-semibold">Valor estimado de toma</span>
-              <div class="mt-2">
-                <p id="ti-result-ars" class="text-3xl font-extrabold tracking-tight text-white">...</p>
-                <p id="ti-result-usd" class="text-sm font-medium text-gray-300 mt-0.5">...</p>
-              </div>
-              <div class="mt-4 pt-4 border-t border-white/15 text-xs text-gray-300 space-y-1">
-                <p id="ti-summary-Difference" class="font-medium"></p>
-              </div>
+        <!-- PASO 2: BATERIA -->
+        <div id="step-2" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
+          <button onclick="goToStep(1)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">2. Salud de la batería</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+            <button onclick="selectBattery(0, '90% a 100%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+              <span class="text-3xl">🔋</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">Óptima</span>
+              <span class="text-xs text-gray-500">90% a 100%</span>
+            </button>
+            <button onclick="selectBattery(-15, '80% a 89%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+              <span class="text-3xl">⚡</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">Normal</span>
+              <span class="text-xs text-gray-500">80% a 89%</span>
+            </button>
+            <button onclick="selectBattery(-35, 'Menos de 80%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+              <span class="text-3xl">⚠️</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">Mantenimiento</span>
+              <span class="text-xs text-gray-500">Menor a 80%</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 3: CONDICION -->
+        <div id="step-3" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
+          <button onclick="goToStep(2)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">3. Estado estético y funcional</h3>
+          <div class="space-y-3 max-w-xl mx-auto">
+            <button onclick="selectCondition(0, 'Impecable')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
+              <p class="font-bold text-sm text-[#1D1D1F]">✨ Impecable</p>
+              <p class="text-xs text-gray-500 mt-1">Todo original, sin rayones ni golpes. Face ID y cámaras perfectas.</p>
+            </button>
+            <button onclick="selectCondition(-30, 'Detalles leves')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
+              <p class="font-bold text-sm text-[#1D1D1F]">🔍 Detalles estéticos leves</p>
+              <p class="text-xs text-gray-500 mt-1">Marcas de uso en los bordes o pantalla, sin roturas.</p>
+            </button>
+            <button onclick="selectCondition(-75, 'Detalles funcionales')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
+              <p class="font-bold text-sm text-[#1D1D1F]">🛠️ Detalles funcionales o roturas</p>
+              <p class="text-xs text-gray-500 mt-1">Módulo cambiado, vidrio trasero roto, o fallas en cámaras/Face ID.</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 4: RESULTADO -->
+        <div id="step-4" class="ti-step p-6 sm:p-10 hidden transition-all duration-500 bg-[#1D1D1F] text-white">
+          <button onclick="goToStep(1)" class="text-xs text-gray-400 hover:text-white mb-4 flex items-center gap-1">← Volver a cotizar</button>
+          
+          <div class="text-center max-w-lg mx-auto">
+            <h3 class="text-[11px] uppercase tracking-widest text-gray-400 font-bold mb-2">Valor estimado de toma</h3>
+            <p id="ti-result-ars" class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2">...</p>
+            <p id="ti-result-usd" class="text-sm font-medium text-gray-400">...</p>
+            
+            <div class="mt-6 bg-white/10 p-4 rounded-2xl text-left">
+              <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider mb-2">Resumen de tu equipo:</p>
+              <p id="ti-summary-text" class="text-sm font-medium text-gray-200 leading-relaxed"></p>
             </div>
 
-            <div class="mt-6 space-y-2">
-              <button onclick="applyTradeInToStore()" class="w-full bg-white text-[#1D1D1F] py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-gray-100 transition">
-                Aplicar este Canje al Catálogo
+            <div class="mt-6 space-y-3">
+              <button onclick="applyTradeInToStore()" class="w-full bg-white text-[#1D1D1F] py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider hover:bg-gray-100 transition shadow-lg">
+                Aplicar descuento al Catálogo
               </button>
-              <button onclick="sendTradeInWhatsApp()" class="w-full bg-green-600 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-green-500 transition">
+              <button onclick="sendTradeInWhatsApp()" class="w-full bg-[#25D366] text-white py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider hover:bg-[#1EBE5C] transition shadow-lg">
                 Consultar por WhatsApp
               </button>
             </div>
+            
+            <p class="text-[10px] text-gray-500 mt-6 leading-relaxed">
+              * Cotización de referencia sujeta a revisión física presencial.
+            </p>
           </div>
         </div>
 
@@ -719,44 +745,57 @@
       }).join("");
     }
 
+    // VARIABLES DEL WIZARD DE PLAN CANJE
+    let wizardData = {
+      modelIdx: null,
+      batteryVal: null,
+      batteryText: "",
+      conditionVal: null,
+      conditionText: ""
+    };
+
     function initTradeIn() {
-      const sel = document.getElementById("ti-model");
-      sel.innerHTML = TRADEIN_MODELS.map((m, idx) => 
-        `<option value="${idx}" ${m.name.includes("iPhone 13 128GB") ? "selected" : ""}>${m.name}</option>`
-      ).join("");
+      const grid = document.getElementById("ti-model-grid");
+      if(grid) {
+        grid.innerHTML = TRADEIN_MODELS.map((m, idx) => 
+          `<button onclick="selectModel(${idx})" class="border border-gray-200 hover:border-blue-600 hover:bg-blue-50 text-[#1D1D1F] rounded-xl py-4 px-2 text-[11px] sm:text-xs font-bold text-center transition focus:outline-none">
+            ${m.name}
+          </button>`
+        ).join("");
+      }
     }
 
-    function getCurrentTradeInQuote() {
-      const idx = Number(document.getElementById("ti-model").value || 0);
-      const batAdj = Number(document.getElementById("ti-battery").value || 0);
-      const condAdj = Number(document.getElementById("ti-condition").value || 0);
-      const model = TRADEIN_MODELS[idx];
-
-      const finalUsd = Math.max(120, model.baseUsd + batAdj + condAdj);
-      const finalArs = finalUsd * EXCHANGE_RATE;
-
-      const batText = document.getElementById("ti-battery").options[document.getElementById("ti-battery").selectedIndex].text;
-      const condText = document.getElementById("ti-condition").options[document.getElementById("ti-condition").selectedIndex].text;
-
-      return {
-        modelName: model.name,
-        battery: batText,
-        condition: condText,
-        valueUsd: finalUsd,
-        valueArs: finalArs
-      };
+    function goToStep(step) {
+      document.querySelectorAll('.ti-step').forEach(el => el.classList.add('hidden'));
+      document.getElementById('step-' + step).classList.remove('hidden');
+      
+      const progress = document.getElementById('ti-progress');
+      if(step === 1) progress.style.width = '25%';
+      if(step === 2) progress.style.width = '50%';
+      if(step === 3) progress.style.width = '75%';
+      if(step === 4) progress.style.width = '100%';
     }
 
-    function calculateTradeIn(isUserAction) {
-      const q = getCurrentTradeInQuote();
-      document.getElementById("ti-result-ars").textContent = "$" + q.valueArs.toLocaleString("es-AR") + " ARS";
-      document.getElementById("ti-result-usd").textContent = `Equivalente a USD ${q.valueUsd} (TC $${EXCHANGE_RATE.toLocaleString("es-AR")})`;
+    function selectModel(idx) {
+      wizardData.modelIdx = idx;
+      goToStep(2);
+    }
 
-      const diffS25 = Math.max(0, (1200000) - q.valueArs);
-      document.getElementById("ti-summary-Difference").innerHTML = 
-        `💡 Por el <strong>Samsung S25 Ultra</strong> pagarías una diferencia aprox. de <strong>$${diffS25.toLocaleString("es-AR")}</strong>.`;
+    function selectBattery(val, text) {
+      wizardData.batteryVal = val;
+      wizardData.batteryText = text;
+      goToStep(3);
+    }
 
-      if(isUserAction && !tradeInAlertShown) {
+    function selectCondition(val, text) {
+      wizardData.conditionVal = val;
+      wizardData.conditionText = text;
+      
+      calculateWizardResult();
+      goToStep(4);
+      
+      // Mostrar alerta toast de revisión física
+      if(!tradeInAlertShown) {
         const toast = document.getElementById("toast-alert");
         toast.classList.remove("hidden");
         toast.classList.add("flex");
@@ -766,6 +805,28 @@
         }, 6000);
         tradeInAlertShown = true;
       }
+    }
+
+    function getCurrentTradeInQuote() {
+      const model = TRADEIN_MODELS[wizardData.modelIdx || 0];
+      // Calcula sumando penalizaciones
+      const finalUsd = Math.max(120, model.baseUsd + (wizardData.batteryVal || 0) + (wizardData.conditionVal || 0));
+      const finalArs = finalUsd * EXCHANGE_RATE;
+
+      return {
+        modelName: model.name,
+        battery: wizardData.batteryText || "Normal",
+        condition: wizardData.conditionText || "Impecable",
+        valueUsd: finalUsd,
+        valueArs: finalArs
+      };
+    }
+
+    function calculateWizardResult() {
+      const q = getCurrentTradeInQuote();
+      document.getElementById("ti-result-ars").textContent = "$" + q.valueArs.toLocaleString("es-AR");
+      document.getElementById("ti-result-usd").textContent = `Equivalente a USD ${q.valueUsd} (TC $${EXCHANGE_RATE.toLocaleString("es-AR")})`;
+      document.getElementById("ti-summary-text").innerHTML = `📱 Modelo: <strong>${q.modelName}</strong> <br>🔋 Batería: <strong>${q.battery}</strong> <br>✨ Estado: <strong>${q.condition}</strong>`;
     }
 
     function applyTradeInToStore() {
