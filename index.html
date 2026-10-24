@@ -722,7 +722,7 @@
     function initTradeIn() {
       const sel = document.getElementById("ti-model");
       sel.innerHTML = TRADEIN_MODELS.map((m, idx) => 
-        `<option value="${idx}" ${m.name.includes("iPhone 13 128GB") ? "selected" : ""}>${m.name} (Ref. Mayorista USD ${m.baseUsd})</option>`
+        `<option value="${idx}" ${m.name.includes("iPhone 13 128GB") ? "selected" : ""}>${m.name}</option>`
       ).join("");
     }
 
