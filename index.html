@@ -236,32 +236,8 @@
         <div id="step-4" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
           <button onclick="goToStep(3)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
           <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">4. Salud de la batería</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <button onclick="selectBattery('100%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
-              <span class="text-3xl">🔋</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">100%</span>
-              <span class="text-[11px] text-gray-500">Óptima / Nueva</span>
-            </button>
-            <button onclick="selectBattery('90% a 99%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
-              <span class="text-3xl">✨</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">90% a 99%</span>
-              <span class="text-[11px] text-gray-500">Excelente</span>
-            </button>
-            <button onclick="selectBattery('85% a 89%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
-              <span class="text-3xl">✅</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">85% a 89%</span>
-              <span class="text-[11px] text-gray-500">Muy Buena</span>
-            </button>
-            <button onclick="selectBattery('80% a 84%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
-              <span class="text-3xl">⚡</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">80% a 84%</span>
-              <span class="text-[11px] text-gray-500">Normal</span>
-            </button>
-            <button onclick="selectBattery('Menos de 80%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none col-span-2 sm:col-span-1">
-              <span class="text-3xl">⚠️</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">Menos de 80%</span>
-              <span class="text-[11px] text-gray-500">Mantenimiento</span>
-            </button>
+          <div id="ti-battery-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <!-- Las opciones de batería se inyectan acá dependiendo si es Apple o Samsung -->
           </div>
         </div>
 
@@ -288,7 +264,7 @@
           <div class="space-y-3 max-w-xl mx-auto">
             <button onclick="selectCondition('Impecable')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
               <p class="font-bold text-sm text-[#1D1D1F]">✨ Impecable</p>
-              <p class="text-xs text-gray-500 mt-1">Todo original, sin rayones ni golpes. Face ID y cámaras perfectas.</p>
+              <p class="text-xs text-gray-500 mt-1">Todo original, sin rayones ni golpes. Sensores y cámaras perfectas.</p>
             </button>
             <button onclick="selectCondition('Detalles estéticos leves')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
               <p class="font-bold text-sm text-[#1D1D1F]">🔍 Detalles estéticos leves</p>
@@ -296,7 +272,7 @@
             </button>
             <button onclick="selectCondition('Detalles funcionales o roturas')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
               <p class="font-bold text-sm text-[#1D1D1F]">🛠️ Detalles funcionales o roturas</p>
-              <p class="text-xs text-gray-500 mt-1">Módulo cambiado, vidrio trasero roto, o fallas en cámaras/Face ID.</p>
+              <p class="text-xs text-gray-500 mt-1">Módulo cambiado, vidrio trasero roto, o fallas en cámaras/sensores.</p>
             </button>
             
             <!-- Opción OTRO -->
@@ -567,6 +543,62 @@
 
     function selectModel(name) {
       wizardData.modelName = name;
+      
+      // Renderizamos las opciones de batería dependiendo de la marca
+      const batteryGrid = document.getElementById("ti-battery-grid");
+      
+      if (wizardData.brand === 'Apple') {
+        // Opciones de batería por porcentaje para iPhone
+        batteryGrid.className = "grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto";
+        batteryGrid.innerHTML = `
+          <button onclick="selectBattery('100%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+            <span class="text-3xl">🔋</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">100%</span>
+            <span class="text-[11px] text-gray-500">Óptima / Nueva</span>
+          </button>
+          <button onclick="selectBattery('90% a 99%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+            <span class="text-3xl">✨</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">90% a 99%</span>
+            <span class="text-[11px] text-gray-500">Excelente</span>
+          </button>
+          <button onclick="selectBattery('85% a 89%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+            <span class="text-3xl">✅</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">85% a 89%</span>
+            <span class="text-[11px] text-gray-500">Muy Buena</span>
+          </button>
+          <button onclick="selectBattery('80% a 84%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+            <span class="text-3xl">⚡</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">80% a 84%</span>
+            <span class="text-[11px] text-gray-500">Normal</span>
+          </button>
+          <button onclick="selectBattery('Menos de 80%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none col-span-2 sm:col-span-1">
+            <span class="text-3xl">⚠️</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">Menos de 80%</span>
+            <span class="text-[11px] text-gray-500">Mantenimiento</span>
+          </button>
+        `;
+      } else {
+        // Opciones cualitativas para Samsung
+        batteryGrid.className = "grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto";
+        batteryGrid.innerHTML = `
+          <button onclick="selectBattery('Como nueva')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+            <span class="text-3xl">🔋</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">Como nueva</span>
+            <span class="text-xs text-gray-500">Duración óptima</span>
+          </button>
+          <button onclick="selectBattery('Buen estado')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+            <span class="text-3xl">✅</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">Buen estado</span>
+            <span class="text-xs text-gray-500">Uso normal</span>
+          </button>
+          <button onclick="selectBattery('Mal estado')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+            <span class="text-3xl">⚠️</span>
+            <span class="font-bold text-sm text-[#1D1D1F]">Mal estado</span>
+            <span class="text-xs text-gray-500">Se descarga rápido</span>
+          </button>
+        `;
+      }
+
       goToStep(4);
     }
 
