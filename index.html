@@ -99,7 +99,7 @@
           Cambiá tu teléfono hoy en <span class="bg-gradient-to-r from-black via-gray-700 to-gray-500 bg-clip-text text-transparent">Crisciphones.</span>
         </h1>
         <p class="mt-4 text-base sm:text-lg text-gray-600 font-normal leading-relaxed">
-          Equipos seleccionados y verificados, accesorios listos para retirar y el mejor sistema de <strong>Plan Canje</strong>: cotizá tu iPhone usado online y pagá solo la diferencia.
+          Equipos seleccionados y verificados, accesorios listos para retirar y el mejor sistema de <strong>Plan Canje</strong>: cotizá tu usado online y pagá solo la diferencia.
         </p>
         <div class="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3">
           <a href="#catalogo" class="bg-[#1D1D1F] text-white px-6 py-3.5 rounded-full text-sm font-semibold hover:bg-black/85 transition shadow-sm">
@@ -181,58 +181,94 @@
     </div>
   </section>
 
-  <!-- SIMULADOR DE PLAN CANJE (ESTILO WIZARD INTERACTIVO MANDA A WHATSAPP) -->
+  <!-- SIMULADOR DE PLAN CANJE (ESTILO WIZARD INTERACTIVO) -->
   <section id="plan-canje" class="bg-[#F5F5F7] border-y border-gray-200/80 py-16">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-2xl mx-auto mb-10">
         <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cotizador Online</span>
         <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-4">¿Querés entregar tu equipo?</h2>
-        <p class="text-gray-600 mt-3 text-sm">Completá estos 3 simples pasos para enviarnos las características de tu iPhone actual y te cotizamos al instante la diferencia por WhatsApp.</p>
+        <p class="text-gray-600 mt-3 text-sm">Completá estos simples pasos para enviarnos las características de tu celular actual y te cotizamos al instante la diferencia por WhatsApp.</p>
       </div>
 
       <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative min-h-[400px]">
         
         <!-- BARRA DE PROGRESO -->
         <div class="bg-gray-100 h-1.5 w-full absolute top-0 left-0">
-          <div id="ti-progress" class="bg-blue-600 h-1.5 w-1/4 transition-all duration-500"></div>
+          <div id="ti-progress" class="bg-blue-600 h-1.5 w-1/6 transition-all duration-500"></div>
         </div>
 
-        <!-- PASO 1: MODELO -->
+        <!-- PASO 1: NOMBRE -->
         <div id="step-1" class="ti-step p-6 sm:p-10 transition-all duration-500">
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">1. ¿Qué modelo tenés?</h3>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">1. ¿Cómo es tu nombre?</h3>
+          <div class="max-w-sm mx-auto space-y-4">
+            <input type="text" id="ti-name-input" placeholder="Ej: Juan Pérez" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-blue-600 transition">
+            <button onclick="submitName()" class="w-full bg-[#1D1D1F] text-white py-3.5 rounded-xl font-bold hover:bg-black/80 transition shadow-md">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- PASO 2: MODELO -->
+        <div id="step-2" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
+          <button onclick="goToStep(1)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">2. ¿Qué equipo entregás?</h3>
           <div id="ti-model-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
             <!-- Botones generados por JS -->
           </div>
         </div>
 
-        <!-- PASO 2: BATERIA -->
-        <div id="step-2" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
-          <button onclick="goToStep(1)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">2. Salud de la batería</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            <button onclick="selectBattery('90% a 100%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+        <!-- PASO 3: BATERIA -->
+        <div id="step-3" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
+          <button onclick="goToStep(2)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">3. Salud de la batería</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <button onclick="selectBattery('100%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
               <span class="text-3xl">🔋</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">Óptima</span>
-              <span class="text-xs text-gray-500">90% a 100%</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">100%</span>
+              <span class="text-[11px] text-gray-500">Óptima / Nueva</span>
             </button>
-            <button onclick="selectBattery('80% a 89%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+            <button onclick="selectBattery('90% a 99%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+              <span class="text-3xl">✨</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">90% a 99%</span>
+              <span class="text-[11px] text-gray-500">Excelente</span>
+            </button>
+            <button onclick="selectBattery('85% a 89%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+              <span class="text-3xl">✅</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">85% a 89%</span>
+              <span class="text-[11px] text-gray-500">Muy Buena</span>
+            </button>
+            <button onclick="selectBattery('80% a 84%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
               <span class="text-3xl">⚡</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">Normal</span>
-              <span class="text-xs text-gray-500">80% a 89%</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">80% a 84%</span>
+              <span class="text-[11px] text-gray-500">Normal</span>
             </button>
-            <button onclick="selectBattery('Menos de 80%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+            <button onclick="selectBattery('Menos de 80%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none col-span-2 sm:col-span-1">
               <span class="text-3xl">⚠️</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">Mantenimiento</span>
-              <span class="text-xs text-gray-500">Menor a 80%</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">Menos de 80%</span>
+              <span class="text-[11px] text-gray-500">Mantenimiento</span>
             </button>
           </div>
         </div>
 
-        <!-- PASO 3: CONDICION -->
-        <div id="step-3" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
-          <button onclick="goToStep(2)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">3. Estado estético y funcional</h3>
+        <!-- PASO 4: CAJA ORIGINAL -->
+        <div id="step-4" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
+          <button onclick="goToStep(3)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">4. ¿Conservás la caja original del equipo?</h3>
+          <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+            <button onclick="selectBox('Sí, tengo la caja')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
+              <span class="text-4xl">📦</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">Sí, la tengo</span>
+            </button>
+            <button onclick="selectBox('No tengo la caja')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
+              <span class="text-4xl">❌</span>
+              <span class="font-bold text-sm text-[#1D1D1F]">No la tengo</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 5: CONDICION Y DETALLES -->
+        <div id="step-5" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
+          <button onclick="goToStep(4)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">5. Estado estético y funcional</h3>
           <div class="space-y-3 max-w-xl mx-auto">
             <button onclick="selectCondition('Impecable')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
               <p class="font-bold text-sm text-[#1D1D1F]">✨ Impecable</p>
@@ -246,11 +282,20 @@
               <p class="font-bold text-sm text-[#1D1D1F]">🛠️ Detalles funcionales o roturas</p>
               <p class="text-xs text-gray-500 mt-1">Módulo cambiado, vidrio trasero roto, o fallas en cámaras/Face ID.</p>
             </button>
+            
+            <!-- Opción OTRO -->
+            <div class="w-full border-2 border-gray-200 rounded-2xl p-4 text-left focus-within:border-blue-600 transition">
+              <p class="font-bold text-sm text-[#1D1D1F] mb-3">✍️ Otro detalle (Especificar)</p>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" id="ti-custom-condition" placeholder="Ej: No funciona el WiFi, batería cambiada..." class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none">
+                <button onclick="submitCustomCondition()" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-blue-700 transition whitespace-nowrap">Confirmar</button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- PASO 4: RESULTADO -->
-        <div id="step-4" class="ti-step p-6 sm:p-10 hidden transition-all duration-500 bg-[#1D1D1F] text-white flex flex-col justify-center items-center">
+        <!-- PASO 6: RESULTADO -->
+        <div id="step-6" class="ti-step p-6 sm:p-10 hidden transition-all duration-500 bg-[#1D1D1F] text-white flex flex-col justify-center items-center">
           <button onclick="goToStep(1)" class="text-xs text-gray-400 hover:text-white mb-4 flex items-center gap-1 self-start">← Volver a cargar datos</button>
           
           <div class="text-center w-full max-w-md">
@@ -259,7 +304,7 @@
             
             <div class="mt-6 bg-white/10 p-5 rounded-2xl text-left shadow-inner">
               <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider mb-3 border-b border-white/10 pb-2">Resumen de tu equipo:</p>
-              <p id="ti-summary-text" class="text-sm font-medium text-gray-200 leading-relaxed"></p>
+              <p id="ti-summary-text" class="text-sm font-medium text-gray-200 leading-relaxed space-y-1"></p>
             </div>
 
             <div class="mt-8">
@@ -447,19 +492,25 @@
     }
 
     // VARIABLES Y LÓGICA DEL WIZARD DE PLAN CANJE
-    // Solo usamos los nombres, ya no hay precios mayoristas de referencia
     const TRADEIN_MODELS = [
       "iPhone 12 / 12 Mini", "iPhone 12 Pro / Pro Max",
       "iPhone 13 / 13 Mini", "iPhone 13 Pro", "iPhone 13 Pro Max",
       "iPhone 14", "iPhone 14 Plus", "iPhone 14 Pro", "iPhone 14 Pro Max",
       "iPhone 15", "iPhone 15 Plus", "iPhone 15 Pro", "iPhone 15 Pro Max",
       "iPhone 16 / 16e", "iPhone 16 Plus", "iPhone 16 Pro", "iPhone 16 Pro Max",
-      "iPhone 17"
+      "iPhone 17", "iPhone 17 Pro", "iPhone 17 Pro Max",
+      "Galaxy S22", "Galaxy S22+", "Galaxy S22 Ultra",
+      "Galaxy S23", "Galaxy S23+", "Galaxy S23 Ultra",
+      "Galaxy S24", "Galaxy S24+", "Galaxy S24 Ultra",
+      "Galaxy S25", "Galaxy S25+", "Galaxy S25 Ultra",
+      "Galaxy S26", "Galaxy S26+", "Galaxy S26 Ultra"
     ];
 
     let wizardData = {
+      userName: "",
       modelName: "",
       batteryText: "",
+      hasBox: "",
       conditionText: ""
     };
 
@@ -479,35 +530,54 @@
       document.getElementById('step-' + step).classList.remove('hidden');
       
       const progress = document.getElementById('ti-progress');
-      if(step === 1) progress.style.width = '25%';
-      if(step === 2) progress.style.width = '50%';
-      if(step === 3) progress.style.width = '75%';
-      if(step === 4) progress.style.width = '100%';
+      const percentages = ['16%', '33%', '50%', '66%', '83%', '100%'];
+      progress.style.width = percentages[step - 1];
+    }
+
+    function submitName() {
+      const name = document.getElementById("ti-name-input").value.trim();
+      if(!name) { alert("Por favor ingresá tu nombre para continuar."); return; }
+      wizardData.userName = name;
+      goToStep(2);
     }
 
     function selectModel(name) {
       wizardData.modelName = name;
-      goToStep(2);
+      goToStep(3);
     }
 
     function selectBattery(text) {
       wizardData.batteryText = text;
-      goToStep(3);
+      goToStep(4);
+    }
+
+    function selectBox(text) {
+      wizardData.hasBox = text;
+      goToStep(5);
+    }
+
+    function submitCustomCondition() {
+      const val = document.getElementById("ti-custom-condition").value.trim();
+      if(!val) { alert("Por favor especificá el detalle para continuar."); return; }
+      selectCondition(val);
     }
 
     function selectCondition(text) {
       wizardData.conditionText = text;
       document.getElementById("ti-summary-text").innerHTML = 
-        `📱 Modelo: <strong>${wizardData.modelName}</strong> <br>` +
-        `🔋 Batería: <strong>${wizardData.batteryText}</strong> <br>` +
-        `✨ Estado: <strong>${wizardData.conditionText}</strong>`;
-      goToStep(4);
+        `<div class="mb-1">👤 Nombre: <strong>${wizardData.userName}</strong></div>` +
+        `<div class="mb-1">📱 Modelo: <strong>${wizardData.modelName}</strong></div>` +
+        `<div class="mb-1">🔋 Batería: <strong>${wizardData.batteryText}</strong></div>` +
+        `<div class="mb-1">📦 Caja original: <strong>${wizardData.hasBox}</strong></div>` +
+        `<div>✨ Estado: <strong>${wizardData.conditionText}</strong></div>`;
+      goToStep(6);
     }
 
     function sendTradeInWhatsApp() {
-      const msg = `Hola Crisciphones! 👋 Quiero cotizar mi equipo para entregarlo en el *Plan Canje*.\n\n` +
+      const msg = `Hola Crisciphones! 👋 Soy *${wizardData.userName}*, quiero cotizar mi equipo para entregarlo en el *Plan Canje*.\n\n` +
         `📱 *Mi equipo:* ${wizardData.modelName}\n` +
         `🔋 *Batería:* ${wizardData.batteryText}\n` +
+        `📦 *Caja original:* ${wizardData.hasBox}\n` +
         `✨ *Estado:* ${wizardData.conditionText}\n\n` +
         `¿Me dirías qué valor de toma tiene o cuánta diferencia pagaría por un modelo más nuevo?`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
