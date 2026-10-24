@@ -4,19 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crisciphones | Equipos Seleccionados, Importados & Plan Canje</title>
+  
+  <!-- Configuración de Tailwind para soportar Dark Mode -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+
+  <!-- Script para aplicar Modo Oscuro antes de que cargue la página y evitar pantallazo blanco -->
+  <script>
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #FFFFFF;
-      color: #1D1D1F;
       -webkit-font-smoothing: antialiased;
     }
     .apple-card {
-      background: #F5F5F7;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .apple-card:hover {
@@ -27,126 +42,140 @@
       background: rgba(255, 255, 255, 0.88);
       backdrop-filter: saturate(180%) blur(20px);
     }
+    /* Clase Glass específica para el modo oscuro */
+    .dark .glass-nav {
+      background: rgba(28, 28, 30, 0.88);
+    }
+    
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
-    /* Scrollbar personalizada para el listado de modelos */
     .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #d1d5db; border-radius: 10px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #4b5563; }
   </style>
 </head>
-<body class="selection:bg-black selection:text-white">
+<body class="bg-white dark:bg-[#000000] text-[#1D1D1F] dark:text-white selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-300">
 
   <!-- BARRA SUPERIOR ANUNCIO -->
-  <div class="bg-[#1D1D1F] text-white text-[11px] sm:text-xs py-2.5 px-4 text-center font-medium tracking-wide">
+  <div class="bg-[#1D1D1F] text-white text-[11px] sm:text-xs py-2.5 px-4 text-center font-medium tracking-wide border-b border-gray-800">
     <span>⚡ <strong>ENTREGA INMEDIATA</strong> • RECIBIMOS TU USADO EN PARTE DE PAGO • COTIZACIÓN USD: <strong>$<span id="top-rate-label">...</span> ARS</strong></span>
   </div>
 
   <!-- HEADER MINIMALISTA -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-gray-200/80">
+  <header class="sticky top-0 z-40 glass-nav border-b border-gray-200/80 dark:border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
       
       <!-- Marca -->
         <a href="#" class="flex items-center gap-2.5 group">
           <img src="logo.JPG" alt="Crisciphones" class="w-9 h-9 rounded-xl object-contain group-hover:scale-105 transition" />
           <div>
-            <span class="font-bold text-lg tracking-tight block leading-none">CRISCIPHONES</span>
+            <span class="font-bold text-lg tracking-tight block leading-none text-[#1D1D1F] dark:text-white">CRISCIPHONES</span>
             <span class="text-[10px] text-gray-500 font-medium tracking-widest uppercase">Mobile Store</span>
           </div>
         </a>
 
       <!-- Navegación Desktop -->
-      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
-        <a href="#catalogo" onclick="filterCategory('all')" class="hover:text-black transition">Todo el Stock</a>
-        <a href="#catalogo" onclick="filterCategory('equipos')" class="hover:text-black transition">Equipos</a>
-        <a href="#catalogo" onclick="filterCategory('accesorios')" class="hover:text-black transition">Accesorios</a>
-        <a href="#catalogo" onclick="filterCategory('pedido')" class="text-red-600 font-bold hover:text-red-700 transition flex items-center gap-1">
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">
+        <a href="#catalogo" onclick="filterCategory('all')" class="hover:text-black dark:hover:text-white transition">Todo el Stock</a>
+        <a href="#catalogo" onclick="filterCategory('equipos')" class="hover:text-black dark:hover:text-white transition">Equipos</a>
+        <a href="#catalogo" onclick="filterCategory('accesorios')" class="hover:text-black dark:hover:text-white transition">Accesorios</a>
+        <a href="#catalogo" onclick="filterCategory('pedido')" class="text-red-600 dark:text-red-500 font-bold hover:text-red-700 dark:hover:text-red-400 transition flex items-center gap-1">
           🔥 Por Encargo (AHORRÁ)
         </a>
-        <a href="#plan-canje" class="text-blue-600 font-semibold hover:text-blue-700 transition flex items-center gap-1">
+        <a href="#plan-canje" class="text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition flex items-center gap-1">
           🔄 Cotizar Mi Usado
         </a>
       </nav>
 
-      <!-- Controles Derecha: Moneda + Dolar + Carrito -->
+      <!-- Controles Derecha -->
       <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Toggle Modo Oscuro -->
+        <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition focus:outline-none">
+          <!-- Luna (modo claro) -->
+          <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <!-- Sol (modo oscuro) -->
+          <svg id="theme-toggle-light-icon" class="hidden w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+
         <!-- Selector Moneda ARS / USD -->
-        <div class="bg-[#F5F5F7] p-1 rounded-full flex items-center text-xs font-semibold border border-gray-200">
-          <button id="btn-ars" onclick="setCurrency('ARS')" class="px-2.5 py-1 rounded-full bg-[#1D1D1F] text-white transition">ARS $</button>
-          <button id="btn-usd" onclick="setCurrency('USD')" class="px-2.5 py-1 rounded-full text-gray-600 hover:text-black transition">USD</button>
+        <div class="bg-[#F5F5F7] dark:bg-[#1C1C1E] p-1 rounded-full flex items-center text-xs font-semibold border border-gray-200 dark:border-gray-800">
+          <button id="btn-ars" onclick="setCurrency('ARS')" class="px-2.5 py-1 rounded-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black transition">ARS $</button>
+          <button id="btn-usd" onclick="setCurrency('USD')" class="px-2.5 py-1 rounded-full text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition">USD</button>
         </div>
 
         <!-- Botón Carrito -->
-        <button onclick="toggleCart(true)" class="relative bg-[#1D1D1F] text-white px-3.5 py-2 rounded-full text-xs font-semibold flex items-center gap-2 hover:bg-black/85 transition">
+        <button onclick="toggleCart(true)" class="relative bg-[#1D1D1F] dark:bg-white text-white dark:text-black px-3.5 py-2 rounded-full text-xs font-semibold flex items-center gap-2 hover:bg-black/85 dark:hover:bg-gray-200 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
           </svg>
           <span class="hidden sm:inline">Carrito</span>
-          <span id="cart-count" class="bg-white text-black px-1.5 py-0.2 rounded-full text-[11px] font-bold">0</span>
+          <span id="cart-count" class="bg-white dark:bg-black text-black dark:text-white px-1.5 py-0.2 rounded-full text-[11px] font-bold">0</span>
         </button>
       </div>
     </div>
   </header>
 
   <!-- HERO PRINCIPAL -->
-  <section class="relative overflow-hidden bg-[#F5F5F7] border-b border-gray-200/70">
+  <section class="relative overflow-hidden bg-[#F5F5F7] dark:bg-[#000000] border-b border-gray-200/70 dark:border-gray-900 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex flex-col lg:flex-row items-center justify-between gap-10">
       <div class="max-w-xl text-center lg:text-left">
-        <div class="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-1 rounded-full text-xs font-semibold text-gray-700 mb-5 shadow-sm">
+        <div class="inline-flex items-center gap-2 bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-gray-800 px-3 py-1 rounded-full text-xs font-semibold text-gray-700 dark:text-gray-300 mb-5 shadow-sm">
           <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
           Stock físico real inmediato + Equipos por encargo con DESCUENTO
         </div>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1D1D1F] leading-[1.06]">
-          Cambiá tu teléfono hoy en <span class="bg-gradient-to-r from-black via-gray-700 to-gray-500 bg-clip-text text-transparent">Crisciphones.</span>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1D1D1F] dark:text-white leading-[1.06]">
+          Cambiá tu teléfono hoy en <span class="bg-gradient-to-r from-black dark:from-white via-gray-700 dark:via-gray-400 to-gray-500 dark:to-gray-600 bg-clip-text text-transparent">Crisciphones.</span>
         </h1>
-        <p class="mt-4 text-base sm:text-lg text-gray-600 font-normal leading-relaxed">
+        <p class="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-400 font-normal leading-relaxed">
           Equipos seleccionados y verificados, accesorios listos para retirar y el mejor sistema de <strong>Plan Canje</strong>: cotizá tu usado online y pagá solo la diferencia.
         </p>
         <div class="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-          <a href="#catalogo" class="bg-[#1D1D1F] text-white px-6 py-3.5 rounded-full text-sm font-semibold hover:bg-black/85 transition shadow-sm">
+          <a href="#catalogo" class="bg-[#1D1D1F] dark:bg-white text-white dark:text-black px-6 py-3.5 rounded-full text-sm font-semibold hover:bg-black/85 dark:hover:bg-gray-200 transition shadow-sm">
             Ver Stock Disponible
           </a>
-          <a href="#plan-canje" class="bg-white text-[#1D1D1F] border border-gray-300 px-6 py-3.5 rounded-full text-sm font-semibold hover:bg-gray-100 transition">
+          <a href="#plan-canje" class="bg-white dark:bg-[#1C1C1E] text-[#1D1D1F] dark:text-white border border-gray-300 dark:border-gray-700 px-6 py-3.5 rounded-full text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition">
             Cotizar mi Usado (Plan Canje)
           </a>
         </div>
       </div>
 
       <!-- Tarjeta Destacada en Stock Inmediato -->
-      <div class="w-full max-w-md bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="w-full max-w-md bg-white dark:bg-[#111111] rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-gray-800">
         <div class="flex items-center justify-between mb-3">
-          <span class="bg-green-100 text-green-800 text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">⚡ En Stock Inmediato</span>
+          <span class="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-400 text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-green-200 dark:border-green-800">⚡ En Stock Inmediato</span>
           <span class="text-xs text-gray-400 font-medium">Destacados de hoy</span>
         </div>
         <div class="space-y-3">
-          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-200 transition" onclick="openProductModal('eq-s25u')">
+          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] dark:bg-[#1C1C1E] flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition" onclick="openProductModal('eq-s25u')">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase">Samsung Flagship</p>
-              <h3 class="font-bold text-base text-[#1D1D1F]">Samsung Galaxy S25 Ultra</h3>
-              <p class="text-xs text-gray-600">Color Blanco • Impecable</p>
+              <h3 class="font-bold text-base text-[#1D1D1F] dark:text-white">Samsung Galaxy S25 Ultra</h3>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Color Blanco • Impecable</p>
             </div>
             <div class="text-right">
-              <p class="font-extrabold text-base text-[#1D1D1F]" data-price-ars="1200000">$1.200.000</p>
-              <span class="text-[11px] font-semibold text-blue-600 hover:underline">Ver equipo →</span>
+              <p class="font-extrabold text-base text-[#1D1D1F] dark:text-white" data-price-ars="1200000">$1.200.000</p>
+              <span class="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline">Ver equipo →</span>
             </div>
           </div>
 
-          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-200 transition" onclick="openProductModal('eq-13pro')">
+          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] dark:bg-[#1C1C1E] flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition" onclick="openProductModal('eq-13pro')">
             <div>
               <p class="text-xs font-semibold text-gray-500 uppercase">Apple Usado Seleccionado</p>
-              <h3 class="font-bold text-base text-[#1D1D1F]">iPhone 13 Pro 128GB</h3>
-              <p class="text-xs text-gray-600">Dorado (Gold) • Bat 79%</p>
+              <h3 class="font-bold text-base text-[#1D1D1F] dark:text-white">iPhone 13 Pro 128GB</h3>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Dorado (Gold) • Bat 79%</p>
             </div>
             <div class="text-right">
-              <p class="font-extrabold text-base text-[#1D1D1F]" data-price-ars="630000">$630.000</p>
-              <span class="text-[11px] font-semibold text-blue-600 hover:underline">Ver equipo →</span>
+              <p class="font-extrabold text-base text-[#1D1D1F] dark:text-white" data-price-ars="630000">$630.000</p>
+              <span class="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline">Ver equipo →</span>
             </div>
           </div>
         </div>
-        <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500">
           <span>📍 Atención personalizada por WhatsApp</span>
-          <a href="https://instagram.com/crisciphones" target="_blank" class="font-semibold text-[#1D1D1F] hover:underline">@crisciphones</a>
+          <a href="https://instagram.com/crisciphones" target="_blank" class="font-semibold text-[#1D1D1F] dark:text-white hover:underline">@crisciphones</a>
         </div>
       </div>
     </div>
@@ -154,13 +183,13 @@
 
   <!-- BANNER PROMOCIONAL iPHONE 18 -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-4">
-    <div class="relative overflow-hidden bg-black rounded-3xl shadow-2xl flex flex-col md:flex-row items-center border border-gray-800">
+    <div class="relative overflow-hidden bg-black dark:bg-[#111111] rounded-3xl shadow-2xl flex flex-col md:flex-row items-center border border-gray-800">
       
       <!-- Contenedor del Video -->
       <div class="w-full md:w-1/2 h-56 md:h-80 relative overflow-hidden bg-gray-900">
         <!-- Reemplaza "TU_VIDEO_AQUI.mp4" por el enlace de tu video -->
         <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-70 md:opacity-90">
-          <source src="video18p.mp4" type="video/mp4">
+          <source src="TU_VIDEO_AQUI.mp4" type="video/mp4">
         </video>
         <!-- Gradiente para suavizar el borde entre video y texto -->
         <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black via-black/50 to-transparent"></div>
@@ -191,16 +220,16 @@
 
       <!-- Filtros de Categoría -->
       <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-        <button onclick="filterCategory('all')" data-cat="all" class="cat-btn bg-[#1D1D1F] text-white px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+        <button onclick="filterCategory('all')" data-cat="all" class="cat-btn bg-[#1D1D1F] dark:bg-white text-white dark:text-black px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
           Todos
         </button>
-        <button onclick="filterCategory('equipos')" data-cat="equipos" class="cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+        <button onclick="filterCategory('equipos')" data-cat="equipos" class="cat-btn bg-[#F5F5F7] dark:bg-[#2C2C2E] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
           ⚡ Equipos en Stock
         </button>
-        <button onclick="filterCategory('accesorios')" data-cat="accesorios" class="cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+        <button onclick="filterCategory('accesorios')" data-cat="accesorios" class="cat-btn bg-[#F5F5F7] dark:bg-[#2C2C2E] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
           🔌 Accesorios en Stock
         </button>
-        <button onclick="filterCategory('pedido')" data-cat="pedido" class="cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
+        <button onclick="filterCategory('pedido')" data-cat="pedido" class="cat-btn bg-[#F5F5F7] dark:bg-[#2C2C2E] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
           🔥 Por Encargo (DESCUENTO)
         </button>
       </div>
@@ -213,51 +242,51 @@
   </section>
 
   <!-- SIMULADOR DE PLAN CANJE (ESTILO WIZARD INTERACTIVO) -->
-  <section id="plan-canje" class="bg-[#F5F5F7] border-y border-gray-200/80 py-16">
+  <section id="plan-canje" class="bg-[#F5F5F7] dark:bg-[#09090b] border-y border-gray-200/80 dark:border-gray-900 py-16 transition-colors duration-300">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-2xl mx-auto mb-10">
-        <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cotizador Online</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-4">¿Querés entregar tu equipo?</h2>
-        <p class="text-gray-600 mt-3 text-sm">Completá estos simples pasos para enviarnos las características de tu celular actual y te cotizamos al instante la diferencia por WhatsApp.</p>
+        <span class="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cotizador Online</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-4 text-[#1D1D1F] dark:text-white">¿Querés entregar tu equipo?</h2>
+        <p class="text-gray-600 dark:text-gray-400 mt-3 text-sm">Completá estos simples pasos para enviarnos las características de tu celular actual y te cotizamos al instante la diferencia por WhatsApp.</p>
       </div>
 
-      <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative min-h-[400px]">
+      <div class="bg-white dark:bg-[#1C1C1E] rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 relative min-h-[400px]">
         
         <!-- BARRA DE PROGRESO -->
-        <div class="bg-gray-100 h-1.5 w-full absolute top-0 left-0">
+        <div class="bg-gray-100 dark:bg-gray-800 h-1.5 w-full absolute top-0 left-0">
           <div id="ti-progress" class="bg-blue-600 h-1.5 w-[14%] transition-all duration-500"></div>
         </div>
 
         <!-- PASO 1: NOMBRE -->
         <div id="step-1" class="ti-step p-6 sm:p-10 transition-all duration-500">
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">1. ¿Cómo es tu nombre?</h3>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F] dark:text-white">1. ¿Cómo es tu nombre?</h3>
           <div class="max-w-sm mx-auto space-y-4">
-            <input type="text" id="ti-name-input" placeholder="Ej: Juan Pérez" class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-blue-600 transition">
-            <button onclick="submitName()" class="w-full bg-[#1D1D1F] text-white py-3.5 rounded-xl font-bold hover:bg-black/80 transition shadow-md">Siguiente →</button>
+            <input type="text" id="ti-name-input" placeholder="Ej: Juan Pérez" class="w-full bg-[#F5F5F7] dark:bg-[#2C2C2E] border border-gray-300 dark:border-gray-700 text-[#1D1D1F] dark:text-white rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 transition placeholder-gray-400 dark:placeholder-gray-500">
+            <button onclick="submitName()" class="w-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black py-3.5 rounded-xl font-bold hover:bg-black/80 dark:hover:bg-gray-200 transition shadow-md">Siguiente →</button>
           </div>
         </div>
 
         <!-- PASO 2: MARCA -->
         <div id="step-2" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
-          <button onclick="goToStep(1)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">2. ¿De qué marca es tu equipo?</h3>
+          <button onclick="goToStep(1)" class="text-xs text-gray-500 dark:text-gray-400 font-semibold hover:text-black dark:hover:text-white mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F] dark:text-white">2. ¿De qué marca es tu equipo?</h3>
           <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
-            <button onclick="selectBrand('Apple')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
+            <button onclick="selectBrand('Apple')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
               <span class="text-4xl">🍎</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">Apple (iPhone)</span>
+              <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">Apple (iPhone)</span>
             </button>
-            <button onclick="selectBrand('Samsung')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
+            <button onclick="selectBrand('Samsung')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
               <span class="text-4xl">📱</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">Samsung (Galaxy)</span>
+              <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">Samsung (Galaxy)</span>
             </button>
           </div>
         </div>
 
         <!-- PASO 3: MODELO -->
         <div id="step-3" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
-          <button onclick="goToStep(2)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">3. ¿Qué modelo entregás?</h3>
+          <button onclick="goToStep(2)" class="text-xs text-gray-500 dark:text-gray-400 font-semibold hover:text-black dark:hover:text-white mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F] dark:text-white">3. ¿Qué modelo entregás?</h3>
           <div id="ti-model-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
             <!-- Botones generados por JS -->
           </div>
@@ -265,8 +294,8 @@
 
         <!-- PASO 4: BATERIA -->
         <div id="step-4" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
-          <button onclick="goToStep(3)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">4. Salud de la batería</h3>
+          <button onclick="goToStep(3)" class="text-xs text-gray-500 dark:text-gray-400 font-semibold hover:text-black dark:hover:text-white mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F] dark:text-white">4. Salud de la batería</h3>
           <div id="ti-battery-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <!-- Las opciones de batería se inyectan acá dependiendo si es Apple o Samsung -->
           </div>
@@ -274,43 +303,43 @@
 
         <!-- PASO 5: CAJA ORIGINAL -->
         <div id="step-5" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
-          <button onclick="goToStep(4)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">5. ¿Conservás la caja original del equipo?</h3>
+          <button onclick="goToStep(4)" class="text-xs text-gray-500 dark:text-gray-400 font-semibold hover:text-black dark:hover:text-white mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F] dark:text-white">5. ¿Conservás la caja original del equipo?</h3>
           <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
-            <button onclick="selectBox('Sí, tengo la caja')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
+            <button onclick="selectBox('Sí, tengo la caja')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
               <span class="text-4xl">📦</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">Sí, la tengo</span>
+              <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">Sí, la tengo</span>
             </button>
-            <button onclick="selectBox('No tengo la caja')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
+            <button onclick="selectBox('No tengo la caja')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-6 flex flex-col items-center gap-3 transition focus:outline-none">
               <span class="text-4xl">❌</span>
-              <span class="font-bold text-sm text-[#1D1D1F]">No la tengo</span>
+              <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">No la tengo</span>
             </button>
           </div>
         </div>
 
         <!-- PASO 6: CONDICION Y DETALLES -->
         <div id="step-6" class="ti-step p-6 sm:p-10 hidden transition-all duration-500">
-          <button onclick="goToStep(5)" class="text-xs text-gray-500 font-semibold hover:text-black mb-4 flex items-center gap-1">← Volver</button>
-          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F]">6. Estado estético y funcional</h3>
+          <button onclick="goToStep(5)" class="text-xs text-gray-500 dark:text-gray-400 font-semibold hover:text-black dark:hover:text-white mb-4 flex items-center gap-1">← Volver</button>
+          <h3 class="text-xl font-bold mb-6 text-center text-[#1D1D1F] dark:text-white">6. Estado estético y funcional</h3>
           <div class="space-y-3 max-w-xl mx-auto">
-            <button onclick="selectCondition('Impecable')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
-              <p class="font-bold text-sm text-[#1D1D1F]">✨ Impecable</p>
-              <p class="text-xs text-gray-500 mt-1">Todo original, sin rayones ni golpes. Sensores y cámaras perfectas.</p>
+            <button onclick="selectCondition('Impecable')" class="w-full border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 text-left transition focus:outline-none">
+              <p class="font-bold text-sm text-[#1D1D1F] dark:text-white">✨ Impecable</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Todo original, sin rayones ni golpes. Sensores y cámaras perfectas.</p>
             </button>
-            <button onclick="selectCondition('Detalles estéticos leves')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
-              <p class="font-bold text-sm text-[#1D1D1F]">🔍 Detalles estéticos leves</p>
-              <p class="text-xs text-gray-500 mt-1">Marcas de uso en los bordes o pantalla, sin roturas.</p>
+            <button onclick="selectCondition('Detalles estéticos leves')" class="w-full border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 text-left transition focus:outline-none">
+              <p class="font-bold text-sm text-[#1D1D1F] dark:text-white">🔍 Detalles estéticos leves</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Marcas de uso en los bordes o pantalla, sin roturas.</p>
             </button>
-            <button onclick="selectCondition('Detalles funcionales o roturas')" class="w-full border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 text-left transition focus:outline-none">
-              <p class="font-bold text-sm text-[#1D1D1F]">🛠️ Detalles funcionales o roturas</p>
-              <p class="text-xs text-gray-500 mt-1">Módulo cambiado, vidrio trasero roto, o fallas en cámaras/sensores.</p>
+            <button onclick="selectCondition('Detalles funcionales o roturas')" class="w-full border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 text-left transition focus:outline-none">
+              <p class="font-bold text-sm text-[#1D1D1F] dark:text-white">🛠️ Detalles funcionales o roturas</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Módulo cambiado, vidrio trasero roto, o fallas en cámaras/sensores.</p>
             </button>
             
             <!-- Opción OTRO -->
-            <div class="w-full border-2 border-gray-200 rounded-2xl p-4 text-left focus-within:border-blue-600 transition">
-              <p class="font-bold text-sm text-[#1D1D1F] mb-3">✍️ Otro detalle (Especificar)</p>
+            <div class="w-full border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] focus-within:border-blue-600 dark:focus-within:border-blue-500 rounded-2xl p-4 text-left transition">
+              <p class="font-bold text-sm text-[#1D1D1F] dark:text-white mb-3">✍️ Otro detalle (Especificar)</p>
               <div class="flex flex-col sm:flex-row gap-2">
-                <input type="text" id="ti-custom-condition" placeholder="Ej: No funciona el WiFi, batería cambiada..." class="w-full bg-[#F5F5F7] border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none">
+                <input type="text" id="ti-custom-condition" placeholder="Ej: No funciona el WiFi, batería cambiada..." class="w-full bg-[#F5F5F7] dark:bg-[#2C2C2E] border border-gray-300 dark:border-gray-700 text-[#1D1D1F] dark:text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none placeholder-gray-400 dark:placeholder-gray-500">
                 <button onclick="submitCustomCondition()" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-blue-700 transition whitespace-nowrap">Confirmar</button>
               </div>
             </div>
@@ -318,14 +347,14 @@
         </div>
 
         <!-- PASO 7: RESULTADO -->
-        <div id="step-7" class="ti-step p-6 sm:p-10 hidden transition-all duration-500 bg-[#1D1D1F] text-white flex flex-col justify-center items-center">
+        <div id="step-7" class="ti-step p-6 sm:p-10 hidden transition-all duration-500 bg-[#1D1D1F] dark:bg-[#000000] text-white flex flex-col justify-center items-center">
           <button onclick="goToStep(1)" class="text-xs text-gray-400 hover:text-white mb-4 flex items-center gap-1 self-start">← Volver a cargar datos</button>
           
           <div class="text-center w-full max-w-md">
             <h3 class="text-2xl font-extrabold tracking-tight mb-2">¡Listo para cotizar!</h3>
             <p class="text-sm font-medium text-gray-400">Enviame estos datos por WhatsApp y te digo cuánta diferencia tenés que pagar por tu próximo equipo.</p>
             
-            <div class="mt-6 bg-white/10 p-5 rounded-2xl text-left shadow-inner">
+            <div class="mt-6 bg-white/10 dark:bg-white/5 border border-white/10 p-5 rounded-2xl text-left shadow-inner">
               <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider mb-3 border-b border-white/10 pb-2">Resumen de tu equipo:</p>
               <p id="ti-summary-text" class="text-sm font-medium text-gray-200 leading-relaxed space-y-1"></p>
             </div>
@@ -345,24 +374,24 @@
   <!-- BENEFICIOS Y CONFIANZA -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="p-6 rounded-2xl bg-[#F5F5F7]">
+      <div class="p-6 rounded-2xl bg-[#F5F5F7] dark:bg-[#1C1C1E]">
         <div class="text-2xl mb-2">🛡️</div>
-        <h3 class="font-bold text-base">Equipos Verificados</h3>
-        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+        <h3 class="font-bold text-base text-[#1D1D1F] dark:text-white">Equipos Verificados</h3>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
           Todos nuestros teléfonos pasan por revisión completa de cámaras, sensores, Face ID, micrófonos y salud real de batería.
         </p>
       </div>
-      <div class="p-6 rounded-2xl bg-[#F5F5F7]">
+      <div class="p-6 rounded-2xl bg-[#F5F5F7] dark:bg-[#1C1C1E]">
         <div class="text-2xl mb-2">🔄</div>
-        <h3 class="font-bold text-base">Plan Canje Transparente</h3>
-        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+        <h3 class="font-bold text-base text-[#1D1D1F] dark:text-white">Plan Canje Transparente</h3>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
           Tomamos tu usado al mejor valor del mercado para que renueves tu equipo entregando el tuyo en el mismo momento.
         </p>
       </div>
-      <div class="p-6 rounded-2xl bg-[#F5F5F7]">
+      <div class="p-6 rounded-2xl bg-[#F5F5F7] dark:bg-[#1C1C1E]">
         <div class="text-2xl mb-2">💵</div>
-        <h3 class="font-bold text-base">Múltiples Medios de Pago</h3>
-        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+        <h3 class="font-bold text-base text-[#1D1D1F] dark:text-white">Múltiples Medios de Pago</h3>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
           Aceptamos Pesos Argentinos (Efectivo o Transferencia), Dólares billete, USDT y financiación personalizada.
         </p>
       </div>
@@ -370,7 +399,7 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="bg-[#1D1D1F] text-white py-12">
+  <footer class="bg-[#1D1D1F] dark:bg-[#000000] text-white py-12 border-t border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
       <div>
         <span class="font-extrabold text-xl tracking-tight">CRISCIPHONES</span>
@@ -389,34 +418,37 @@
 
   <!-- MODAL DETALLE DE PRODUCTO -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden">
-    <div onclick="closeProductModal()" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+    <div onclick="closeProductModal()" class="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm transition-opacity"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
-      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row pointer-events-auto relative">
-        <button onclick="closeProductModal()" class="absolute top-4 right-4 z-20 w-8 h-8 bg-black/10 rounded-full flex items-center justify-center text-black hover:bg-black/20 transition backdrop-blur-md">
+      <div class="bg-white dark:bg-[#1C1C1E] rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row pointer-events-auto relative border border-transparent dark:border-gray-800">
+        
+        <button onclick="closeProductModal()" class="absolute top-4 right-4 z-20 w-8 h-8 bg-black/10 dark:bg-white/10 rounded-full flex items-center justify-center text-black dark:text-white hover:bg-black/20 dark:hover:bg-white/20 transition backdrop-blur-md">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-        <div class="w-full md:w-1/2 bg-gray-100 flex flex-col relative h-[40vh] md:h-auto">
-          <div class="flex-1 w-full bg-white relative flex items-center justify-center overflow-hidden">
+        
+        <div class="w-full md:w-1/2 bg-gray-100 dark:bg-[#000000] flex flex-col relative h-[40vh] md:h-auto">
+          <div class="flex-1 w-full bg-white dark:bg-black relative flex items-center justify-center overflow-hidden">
             <img id="modal-main-img" src="" class="object-cover w-full h-full" alt="Imagen principal" />
           </div>
-          <div id="modal-thumbnails" class="flex gap-3 p-4 bg-gray-50 overflow-x-auto no-scrollbar border-t border-gray-200"></div>
+          <div id="modal-thumbnails" class="flex gap-3 p-4 bg-gray-50 dark:bg-[#000000] overflow-x-auto no-scrollbar border-t border-gray-200 dark:border-gray-800"></div>
         </div>
+        
         <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto">
           <div>
             <span id="modal-badge" class="inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3"></span>
-            <h3 id="modal-title" class="font-extrabold text-2xl md:text-3xl text-[#1D1D1F] leading-tight"></h3>
+            <h3 id="modal-title" class="font-extrabold text-2xl md:text-3xl text-[#1D1D1F] dark:text-white leading-tight"></h3>
             <div class="mt-4 space-y-2">
-              <p class="flex items-center gap-2 text-sm text-gray-700 font-medium"><span class="text-lg">✨</span> <span id="modal-condition"></span></p>
-              <p class="flex items-center gap-2 text-sm text-gray-700 font-medium"><span class="text-lg">📱</span> <span id="modal-specs"></span></p>
+              <p class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-medium"><span class="text-lg">✨</span> <span id="modal-condition"></span></p>
+              <p class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-medium"><span class="text-lg">📱</span> <span id="modal-specs"></span></p>
             </div>
-            <div class="mt-6 pt-5 border-t border-gray-200/80">
-              <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-1">Precio de lista</p>
-              <p id="modal-price" class="text-4xl font-extrabold text-[#1D1D1F] tracking-tight"></p>
-              <p id="modal-price-sub" class="text-sm text-gray-500 font-medium mt-1"></p>
+            <div class="mt-6 pt-5 border-t border-gray-200/80 dark:border-gray-800">
+              <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Precio de lista</p>
+              <p id="modal-price" class="text-4xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight"></p>
+              <p id="modal-price-sub" class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1"></p>
             </div>
           </div>
           <div class="mt-8 space-y-3">
-            <button id="modal-add-btn" class="w-full bg-[#1D1D1F] text-white py-4 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-black/85 transition shadow-lg">Agregar al Pedido</button>
+            <button id="modal-add-btn" class="w-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black py-4 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-black/85 dark:hover:bg-gray-200 transition shadow-lg">Agregar al Pedido</button>
             <p class="text-center text-[11px] text-gray-400 font-medium mt-2">Podrás elegir el medio de pago antes de confirmar.</p>
           </div>
         </div>
@@ -426,24 +458,25 @@
 
   <!-- DRAWER CARRITO LATERAL -->
   <div id="cart-modal" class="fixed inset-0 z-50 hidden">
-    <div onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 backdrop-blur-xs"></div>
-    <div class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col z-10 transition-transform">
-      <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+    <div onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-xs"></div>
+    <div class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white dark:bg-[#1C1C1E] shadow-2xl flex flex-col z-10 transition-transform border-l border-transparent dark:border-gray-800">
+      <div class="p-5 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
         <div>
-          <h3 class="font-extrabold text-lg">Tu Pedido en Crisciphones</h3>
-          <p class="text-xs text-gray-500">Se envía directo a nuestro WhatsApp para coordinar</p>
+          <h3 class="font-extrabold text-lg text-[#1D1D1F] dark:text-white">Tu Pedido en Crisciphones</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Se envía directo a nuestro WhatsApp</p>
         </div>
-        <button onclick="toggleCart(false)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-black">✕</button>
+        <button onclick="toggleCart(false)" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white">✕</button>
       </div>
-      <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
-      <div class="p-5 bg-[#F5F5F7] border-t border-gray-200 space-y-3">
+      <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3 bg-white dark:bg-[#1C1C1E]"></div>
+      
+      <div class="p-5 bg-[#F5F5F7] dark:bg-[#111111] border-t border-gray-200 dark:border-gray-800 space-y-3">
         <div class="flex items-center justify-between text-sm">
-          <span class="text-gray-600 font-medium">Subtotal aproximado:</span>
-          <span id="cart-total" class="text-xl font-extrabold text-[#1D1D1F]">$0</span>
+          <span class="text-gray-600 dark:text-gray-400 font-medium">Subtotal aproximado:</span>
+          <span id="cart-total" class="text-xl font-extrabold text-[#1D1D1F] dark:text-white">$0</span>
         </div>
         <div>
-          <label class="block text-[11px] font-bold uppercase text-gray-500 mb-1">Forma de pago preferida</label>
-          <select id="cart-payment" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-semibold">
+          <label class="block text-[11px] font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">Forma de pago preferida</label>
+          <select id="cart-payment" class="w-full bg-white dark:bg-[#2C2C2E] border border-gray-300 dark:border-gray-700 text-[#1D1D1F] dark:text-white rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-blue-500">
             <option value="Efectivo / Transferencia en Pesos">Efectivo / Transferencia en Pesos</option>
             <option value="Dólares Billete / USDT">Dólares Billete / USDT</option>
             <option value="Plan Canje (Entrego mi usado + diferencia)">Plan Canje (Entrego mi usado + diferencia)</option>
@@ -467,6 +500,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <script>
+    // LOGICA DARK MODE TOGGLE
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    // Cambiar los iconos dependiendo del modo actual al cargar
+    if (document.documentElement.classList.contains('dark')) {
+        lightIcon.classList.remove('hidden');
+    } else {
+        darkIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', function() {
+        darkIcon.classList.toggle('hidden');
+        lightIcon.classList.toggle('hidden');
+
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('color-theme', 'light');
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('color-theme', 'dark');
+        }
+    });
+
     // CONFIGURACIÓN DE CRISCIPHONES
     const WHATSAPP_NUMBER = "5492634308126";
     const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTj1fphzTCrofnKHuruUZo4gStFdTI3U3m8DHW2w9sNJGTeo5rwctU-x7wyKypjjlZwOF_zda25f_jr/pub?output=csv";
@@ -561,10 +619,9 @@
     function selectBrand(brand) {
       wizardData.brand = brand;
       
-      // Armamos la grilla de modelos dinámicamente según la marca elegida
       const grid = document.getElementById("ti-model-grid");
       grid.innerHTML = TRADEIN_MODELS[brand].map(name => 
-        `<button onclick="selectModel('${name}')" class="border border-gray-200 hover:border-blue-600 hover:bg-blue-50 text-[#1D1D1F] rounded-xl py-4 px-2 text-[11px] sm:text-xs font-bold text-center transition focus:outline-none">
+        `<button onclick="selectModel('${name}')" class="border border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:border-blue-600 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-[#1D1D1F] dark:text-white rounded-xl py-4 px-2 text-[11px] sm:text-xs font-bold text-center transition focus:outline-none">
           ${name}
         </button>`
       ).join("");
@@ -575,57 +632,54 @@
     function selectModel(name) {
       wizardData.modelName = name;
       
-      // Renderizamos las opciones de batería dependiendo de la marca
       const batteryGrid = document.getElementById("ti-battery-grid");
       
       if (wizardData.brand === 'Apple') {
-        // Opciones de batería por porcentaje para iPhone
         batteryGrid.className = "grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto";
         batteryGrid.innerHTML = `
-          <button onclick="selectBattery('100%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+          <button onclick="selectBattery('100%')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
             <span class="text-3xl">🔋</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">100%</span>
-            <span class="text-[11px] text-gray-500">Óptima / Nueva</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">100%</span>
+            <span class="text-[11px] text-gray-500 dark:text-gray-400">Óptima / Nueva</span>
           </button>
-          <button onclick="selectBattery('90% a 99%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+          <button onclick="selectBattery('90% a 99%')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
             <span class="text-3xl">✨</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">90% a 99%</span>
-            <span class="text-[11px] text-gray-500">Excelente</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">90% a 99%</span>
+            <span class="text-[11px] text-gray-500 dark:text-gray-400">Excelente</span>
           </button>
-          <button onclick="selectBattery('85% a 89%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+          <button onclick="selectBattery('85% a 89%')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
             <span class="text-3xl">✅</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">85% a 89%</span>
-            <span class="text-[11px] text-gray-500">Muy Buena</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">85% a 89%</span>
+            <span class="text-[11px] text-gray-500 dark:text-gray-400">Muy Buena</span>
           </button>
-          <button onclick="selectBattery('80% a 84%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
+          <button onclick="selectBattery('80% a 84%')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none">
             <span class="text-3xl">⚡</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">80% a 84%</span>
-            <span class="text-[11px] text-gray-500">Normal</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">80% a 84%</span>
+            <span class="text-[11px] text-gray-500 dark:text-gray-400">Normal</span>
           </button>
-          <button onclick="selectBattery('Menos de 80%')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none col-span-2 sm:col-span-1">
+          <button onclick="selectBattery('Menos de 80%')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-4 flex flex-col items-center gap-2 transition focus:outline-none col-span-2 sm:col-span-1">
             <span class="text-3xl">⚠️</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">Menos de 80%</span>
-            <span class="text-[11px] text-gray-500">Mantenimiento</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">Menos de 80%</span>
+            <span class="text-[11px] text-gray-500 dark:text-gray-400">Mantenimiento</span>
           </button>
         `;
       } else {
-        // Opciones cualitativas para Samsung
         batteryGrid.className = "grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto";
         batteryGrid.innerHTML = `
-          <button onclick="selectBattery('Como nueva')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+          <button onclick="selectBattery('Como nueva')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
             <span class="text-3xl">🔋</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">Como nueva</span>
-            <span class="text-xs text-gray-500">Duración óptima</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">Como nueva</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400">Duración óptima</span>
           </button>
-          <button onclick="selectBattery('Buen estado')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+          <button onclick="selectBattery('Buen estado')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
             <span class="text-3xl">✅</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">Buen estado</span>
-            <span class="text-xs text-gray-500">Uso normal</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">Buen estado</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400">Uso normal</span>
           </button>
-          <button onclick="selectBattery('Mal estado')" class="border-2 border-gray-200 hover:border-blue-600 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
+          <button onclick="selectBattery('Mal estado')" class="border-2 border-gray-200 dark:border-gray-700 bg-transparent dark:bg-[#1C1C1E] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-600 dark:hover:border-blue-500 rounded-2xl p-5 flex flex-col items-center gap-2 transition focus:outline-none">
             <span class="text-3xl">⚠️</span>
-            <span class="font-bold text-sm text-[#1D1D1F]">Mal estado</span>
-            <span class="text-xs text-gray-500">Se descarga rápido</span>
+            <span class="font-bold text-sm text-[#1D1D1F] dark:text-white">Mal estado</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400">Se descarga rápido</span>
           </button>
         `;
       }
@@ -652,11 +706,11 @@
     function selectCondition(text) {
       wizardData.conditionText = text;
       document.getElementById("ti-summary-text").innerHTML = 
-        `<div class="mb-1">👤 Nombre: <strong>${wizardData.userName}</strong></div>` +
-        `<div class="mb-1">📱 Equipo: <strong>${wizardData.brand} ${wizardData.modelName}</strong></div>` +
-        `<div class="mb-1">🔋 Batería: <strong>${wizardData.batteryText}</strong></div>` +
-        `<div class="mb-1">📦 Caja original: <strong>${wizardData.hasBox}</strong></div>` +
-        `<div>✨ Estado: <strong>${wizardData.conditionText}</strong></div>`;
+        `<div class="mb-1">👤 Nombre: <strong class="text-white">${wizardData.userName}</strong></div>` +
+        `<div class="mb-1">📱 Equipo: <strong class="text-white">${wizardData.brand} ${wizardData.modelName}</strong></div>` +
+        `<div class="mb-1">🔋 Batería: <strong class="text-white">${wizardData.batteryText}</strong></div>` +
+        `<div class="mb-1">📦 Caja original: <strong class="text-white">${wizardData.hasBox}</strong></div>` +
+        `<div>✨ Estado: <strong class="text-white">${wizardData.conditionText}</strong></div>`;
       goToStep(7);
     }
 
@@ -681,11 +735,11 @@
       const btnArs = document.getElementById("btn-ars");
       const btnUsd = document.getElementById("btn-usd");
       if (curr === "ARS") {
-        btnArs.className = "px-2.5 py-1 rounded-full bg-[#1D1D1F] text-white transition";
-        btnUsd.className = "px-2.5 py-1 rounded-full text-gray-600 hover:text-black transition";
+        btnArs.className = "px-2.5 py-1 rounded-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black transition";
+        btnUsd.className = "px-2.5 py-1 rounded-full text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition";
       } else {
-        btnUsd.className = "px-2.5 py-1 rounded-full bg-[#1D1D1F] text-white transition";
-        btnArs.className = "px-2.5 py-1 rounded-full text-gray-600 hover:text-black transition";
+        btnUsd.className = "px-2.5 py-1 rounded-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black transition";
+        btnArs.className = "px-2.5 py-1 rounded-full text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition";
       }
       document.querySelectorAll("[data-price-ars]").forEach(el => {
         el.textContent = formatMoney(Number(el.getAttribute("data-price-ars")));
@@ -698,9 +752,9 @@
       currentCategory = cat;
       document.querySelectorAll(".cat-btn").forEach(btn => {
         if (btn.getAttribute("data-cat") === cat) {
-          btn.className = "cat-btn bg-[#1D1D1F] text-white px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition";
+          btn.className = "cat-btn bg-[#1D1D1F] dark:bg-white text-white dark:text-black px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition";
         } else {
-          btn.className = "cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition";
+          btn.className = "cat-btn bg-[#F5F5F7] dark:bg-[#2C2C2E] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition";
         }
       });
       renderProducts();
@@ -712,7 +766,7 @@
       
       document.getElementById("product-modal").classList.remove("hidden");
       const badge = document.getElementById("modal-badge");
-      badge.className = (p.badgeColor || 'bg-gray-100 text-gray-800') + " inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3";
+      badge.className = (p.badgeColor || 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200') + " inline-block text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider mb-3";
       badge.textContent = p.badge || '';
       
       document.getElementById("modal-title").textContent = p.name;
@@ -725,7 +779,7 @@
       if (p.images && p.images.length > 0) {
         thumbsContainer.innerHTML = p.images.map(img => `
           <img src="${img}" onclick="document.getElementById('modal-main-img').src='${img}'" 
-               class="w-20 h-20 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-black opacity-80 hover:opacity-100 transition shadow-sm" />
+               class="w-20 h-20 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-black dark:hover:border-white opacity-80 hover:opacity-100 transition shadow-sm" />
         `).join("");
       } else {
         thumbsContainer.innerHTML = ""; 
@@ -756,7 +810,7 @@
       const filtered = currentCategory === "all" ? PRODUCTS : PRODUCTS.filter(p => p.category === currentCategory);
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-10">Cargando catálogo...</p>`;
+        grid.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 py-10">Cargando catálogo...</p>`;
         return;
       }
 
@@ -769,16 +823,16 @@
             : `En pesos: $${p.priceArs.toLocaleString("es-AR")} ARS`;
 
           priceHtml = `
-            <div class="mt-4 pt-3 border-t border-gray-200/80">
-              <p class="text-2xl font-extrabold text-[#1D1D1F]">${mainPrice}</p>
-              <p class="text-[11px] text-gray-500 font-medium">${secondaryPrice}</p>
+            <div class="mt-4 pt-3 border-t border-gray-200/80 dark:border-gray-800">
+              <p class="text-2xl font-extrabold text-[#1D1D1F] dark:text-white">${mainPrice}</p>
+              <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium">${secondaryPrice}</p>
             </div>
           `;
         } else {
           priceHtml = `
-            <div class="mt-4 pt-3 border-t border-gray-200/80">
-              <p class="text-base font-extrabold text-red-600 flex items-center gap-1">🔥 Por Encargo (Descuento)</p>
-              <p class="text-[11px] text-gray-500 font-medium">Conseguilo más barato encargándolo</p>
+            <div class="mt-4 pt-3 border-t border-gray-200/80 dark:border-gray-800">
+              <p class="text-base font-extrabold text-red-600 dark:text-red-500 flex items-center gap-1">🔥 Por Encargo (Descuento)</p>
+              <p class="text-[11px] text-gray-500 dark:text-gray-400 font-medium">Conseguilo más barato encargándolo</p>
             </div>
           `;
         }
@@ -788,24 +842,24 @@
         
         if (p.category === "equipos") {
           imgTag = `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-xl cursor-pointer hover:scale-110 transition duration-500" onclick="openProductModal('${p.id}')" />`;
-          buttonHtml = `<button onclick="openProductModal('${p.id}')" class="mt-4 w-full bg-white text-[#1D1D1F] border border-gray-300 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-gray-100 transition">Ver Detalles y Fotos</button>`;
+          buttonHtml = `<button onclick="openProductModal('${p.id}')" class="mt-4 w-full bg-white dark:bg-[#2C2C2E] text-[#1D1D1F] dark:text-white border border-gray-300 dark:border-gray-700 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-gray-100 dark:hover:bg-gray-700 transition">Ver Detalles y Fotos</button>`;
         } else {
           const btnLabel = p.priceArs !== null ? "Agregar al Pedido" : "Consultar Ingreso";
-          buttonHtml = `<button onclick="addToCart('${p.id}')" class="mt-4 w-full bg-[#1D1D1F] text-white py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-black/80 transition">${btnLabel}</button>`;
+          buttonHtml = `<button onclick="addToCart('${p.id}')" class="mt-4 w-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-black/80 dark:hover:bg-gray-200 transition">${btnLabel}</button>`;
         }
 
         return `
-          <div class="apple-card rounded-3xl p-5 flex flex-col justify-between border border-gray-200/60">
+          <div class="apple-card bg-[#F5F5F7] dark:bg-[#1C1C1E] rounded-3xl p-5 flex flex-col justify-between border border-gray-200/60 dark:border-gray-800">
             <div>
               <div class="flex items-center justify-between gap-2 mb-3">
-                <span class="${p.badgeColor || 'bg-gray-100 text-gray-800'} text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">${p.badge || ''}</span>
+                <span class="${p.badgeColor || 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'} text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">${p.badge || ''}</span>
               </div>
-              <div class="aspect-square rounded-2xl bg-white overflow-hidden mb-4 flex items-center justify-center p-4">
+              <div class="aspect-square rounded-2xl bg-white dark:bg-black/50 overflow-hidden mb-4 flex items-center justify-center p-4">
                 ${imgTag}
               </div>
-              <h3 class="font-bold text-base text-[#1D1D1F] leading-snug">${p.name}</h3>
-              <p class="text-xs font-semibold text-gray-600 mt-1">${p.condition || ''}</p>
-              <p class="text-xs text-gray-500 mt-0.5">${p.specs || ''}</p>
+              <h3 class="font-bold text-base text-[#1D1D1F] dark:text-white leading-snug">${p.name}</h3>
+              <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mt-1">${p.condition || ''}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-500 mt-0.5">${p.specs || ''}</p>
               ${priceHtml}
             </div>
             ${buttonHtml}
@@ -848,12 +902,12 @@
         itemsEl.innerHTML = `<p class="text-xs text-gray-400 text-center py-10">Todavía no agregaste productos a tu pedido.</p>`;
       } else {
         itemsEl.innerHTML = cart.map(item => `
-          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] flex items-center justify-between gap-3">
+          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] dark:bg-[#2C2C2E] flex items-center justify-between gap-3">
             <div>
-              <h4 class="font-bold text-xs text-[#1D1D1F]">${item.name} (x${item.qty})</h4>
-              <p class="text-[11px] text-gray-500">${item.priceArs !== null ? formatMoney(item.priceArs * item.qty) : "A cotizar"}</p>
+              <h4 class="font-bold text-xs text-[#1D1D1F] dark:text-white">${item.name} (x${item.qty})</h4>
+              <p class="text-[11px] text-gray-500 dark:text-gray-400">${item.priceArs !== null ? formatMoney(item.priceArs * item.qty) : "A cotizar"}</p>
             </div>
-            <button onclick="removeFromCart('${item.id}')" class="text-xs text-red-500 font-semibold hover:underline">Quitar</button>
+            <button onclick="removeFromCart('${item.id}')" class="text-xs text-red-500 dark:text-red-400 font-semibold hover:underline">Quitar</button>
           </div>
         `).join("");
       }
