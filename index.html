@@ -5,7 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crisciphones | Equipos Seleccionados, Importados & Plan Canje</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">// Variable global para guardar el valor del dólar
+let cotizacionDolarVenta = 0;
+
+// Función para consultar el valor en tiempo real
+async function obtenerDolarBlue() {
+  try {
+    const response = await fetch("https://dolarapi.com/v1/dolares/blue");
+    const data = await response.json();
+    cotizacionDolarVenta = data.venta; // Guardamos el valor de venta
+    console.log("Cotización Dólar Blue Venta: $" + cotizacionDolarVenta);
+  } catch (error) {
+    console.error("Error al obtener el dólar. Usando valor por defecto.", error);
+    cotizacionDolarVenta = 1560; // Valor de respaldo por si falla tu conexión
+  }
+}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -440,7 +454,21 @@
     // CATÁLOGO REAL
    let PRODUCTS = [];
 const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTj1fphzTCrofnKHuruUZo4gStFdTI3U3m8DHW2w9sNJGTeo5rwctU-x7wyKypjjlZwOF_zda25f_jr/pub?output=csv";
+// Variable global para guardar el valor del dólar
+let cotizacionDolarVenta = 0;
 
+// Función para consultar el valor en tiempo real
+async function obtenerDolarBlue() {
+  try {
+    const response = await fetch("https://dolarapi.com/v1/dolares/blue");
+    const data = await response.json();
+    cotizacionDolarVenta = data.venta; // Guardamos el valor de venta
+    console.log("Cotización Dólar Blue Venta: $" + cotizacionDolarVenta);
+  } catch (error) {
+    console.error("Error al obtener el dólar. Usando valor por defecto.", error);
+    cotizacionDolarVenta = 1560; // Valor de respaldo por si falla tu conexión
+  }
+}
 async function loadProducts() {
   Papa.parse(SPREADSHEET_URL, {
     download: true,
@@ -838,10 +866,11 @@ async function loadProducts() {
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    // Iniciar tienda
-    initTradeIn();
-    loadProducts();
-    renderCart();
-  </script>
-</body>
-</html>
+async function iniciarTienda() {
+  initTradeIn();
+  await obtenerDolarBlue(); // 1. Espera a tener el precio del dólar real
+  loadProducts();           // 2. Descarga el Excel (acá ya podés usar la variable cotizacionDolarVenta)
+  renderCart();
+}
+
+iniciarTienda();
