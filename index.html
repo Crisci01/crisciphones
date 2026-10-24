@@ -57,11 +57,13 @@
         </a>
 
       <!-- Navegación Desktop -->
-      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-600">
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
         <a href="#catalogo" onclick="filterCategory('all')" class="hover:text-black transition">Todo el Stock</a>
         <a href="#catalogo" onclick="filterCategory('equipos')" class="hover:text-black transition">Equipos</a>
-        <a href="#catalogo" onclick="filterCategory('pedido')" class="hover:text-black transition">Por Encargo (Mayorista)</a>
         <a href="#catalogo" onclick="filterCategory('accesorios')" class="hover:text-black transition">Accesorios</a>
+        <a href="#catalogo" onclick="filterCategory('pedido')" class="text-red-600 font-bold hover:text-red-700 transition flex items-center gap-1">
+          🔥 Por Encargo (AHORRÁ)
+        </a>
         <a href="#plan-canje" class="text-blue-600 font-semibold hover:text-blue-700 transition flex items-center gap-1">
           🔄 Cotizar Mi Usado
         </a>
@@ -93,7 +95,7 @@
       <div class="max-w-xl text-center lg:text-left">
         <div class="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-1 rounded-full text-xs font-semibold text-gray-700 mb-5 shadow-sm">
           <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-          Stock físico real para entrega inmediata + Pedidos a cotización mayorista
+          Stock físico real inmediato + Equipos por encargo con DESCUENTO
         </div>
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1D1D1F] leading-[1.06]">
           Cambiá tu teléfono hoy en <span class="bg-gradient-to-r from-black via-gray-700 to-gray-500 bg-clip-text text-transparent">Crisciphones.</span>
@@ -155,7 +157,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
       <div>
         <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Catálogo Crisciphones</h2>
-        <p class="text-sm text-gray-500 mt-1">Equipos en stock físico real, ingresos a pedido y accesorios en stock.</p>
+        <p class="text-sm text-gray-500 mt-1">Equipos en stock físico real, accesorios y equipos a pedido con descuento.</p>
       </div>
 
       <!-- Filtros de Categoría -->
@@ -170,7 +172,7 @@
           🔌 Accesorios en Stock
         </button>
         <button onclick="filterCategory('pedido')" data-cat="pedido" class="cat-btn bg-[#F5F5F7] text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition">
-          📦 Por Encargo / Mayorista
+          🔥 Por Encargo (DESCUENTO)
         </button>
       </div>
     </div>
@@ -325,7 +327,7 @@
         <div class="text-2xl mb-2">🔄</div>
         <h3 class="font-bold text-base">Plan Canje Transparente</h3>
         <p class="text-xs text-gray-600 mt-1 leading-relaxed">
-          Tomamos tu usado al mejor valor del mercado mayorista para que renueves tu equipo entregando el tuyo en el mismo momento.
+          Tomamos tu usado al mejor valor del mercado para que renueves tu equipo entregando el tuyo en el mismo momento.
         </p>
       </div>
       <div class="p-6 rounded-2xl bg-[#F5F5F7]">
@@ -746,8 +748,8 @@
         } else {
           priceHtml = `
             <div class="mt-4 pt-3 border-t border-gray-200/80">
-              <p class="text-base font-extrabold text-[#1D1D1F]">Cotización a Pedido</p>
-              <p class="text-[11px] text-gray-500 font-medium">Traemos el color y GB que busques</p>
+              <p class="text-base font-extrabold text-red-600 flex items-center gap-1">🔥 Por Encargo (Descuento)</p>
+              <p class="text-[11px] text-gray-500 font-medium">Conseguilo más barato encargándolo</p>
             </div>
           `;
         }
