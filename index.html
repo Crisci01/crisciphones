@@ -560,8 +560,15 @@
       }
     }
 
-    // 2. DESCARGAR PRODUCTOS DEL GOOGLE SHEET
+   // 2. DESCARGAR PRODUCTOS DEL GOOGLE SHEET
     function loadProducts() {
+      // Convertidor automático de links de Google Drive a formato de imagen directa
+      const formatearLink = (url) => {
+        if (!url) return "";
+        const match = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
+        return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
+      };
+
       Papa.parse(SPREADSHEET_URL, {
         download: true,
         header: true,
@@ -572,8 +579,10 @@
             if (p.priceArs) price = Number(p.priceArs);
             else if (p.priceUsd) price = Number(p.priceUsd) * EXCHANGE_RATE;
             
-            let imgArray = p.images ? String(p.images).split(',').map(i => i.trim()) : [];
-            let mainImage = p.image ? String(p.image).trim() : (imgArray.length > 0 ? imgArray[0] : '');
+            // Aplicamos el formateador a todas las imágenes
+            let imgArray = p.images ? String(p.images).split(',').map(i => formatearLink(i.trim())) : [];
+            let rawMain = p.image ? String(p.image).trim() : '';
+            let mainImage = rawMain ? formatearLink(rawMain) : (imgArray.length > 0 ? imgArray[0] : '');
 
             return { ...p, image: mainImage, images: imgArray, priceArs: price };
           }).filter(p => p.id); 
@@ -583,7 +592,6 @@
         }
       });
     }
-
     // VARIABLES Y LÓGICA DEL WIZARD DE PLAN CANJE
     const TRADEIN_MODELS = {
       Apple: [
