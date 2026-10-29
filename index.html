@@ -562,24 +562,29 @@
 
    // 2. DESCARGAR PRODUCTOS DEL GOOGLE SHEET
     // 2. DESCARGAR PRODUCTOS DEL GOOGLE SHEET
+    // 2. DESCARGAR PRODUCTOS DEL GOOGLE SHEET
     function loadProducts() {
-      // Función para limpiar texto y dejar solo números
+      // Función ultra robusta para limpiar el precio (elimina puntos, signos $, letras)
       const limpiarPrecio = (valor) => {
         if (valor === null || valor === undefined || valor === "") return null;
-        // Si ya es un número, lo devuelve
         if (typeof valor === 'number') return valor;
         
-        // Si es texto, quita todo lo que no sea número o punto decimal
-        const numStr = String(valor).replace(/[^0-9.]/g, '');
+        // Convertimos a texto
+        let str = String(valor);
+        // 1. Eliminamos los puntos (usados para miles: 1.200.000 -> 1200000)
+        str = str.replace(/\./g, '');
+        // 2. Si hay coma para centavos, la cambiamos a punto decimal
+        str = str.replace(/,/g, '.');
+        // 3. Quitamos cualquier otro símbolo (letras, $, espacios)
+        let numStr = str.replace(/[^0-9.]/g, '');
+        
         const num = Number(numStr);
         return isNaN(num) || numStr === '' ? null : num;
       };
 
-      // Función para extraer el ID correcto de enlaces de Drive variados
       const formatearLink = (url) => {
         if (!url) return "";
         let urlLimpia = url.trim();
-        // Detecta enlaces comunes de Google Drive
         const match = urlLimpia.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([a-zA-Z0-9_-]+)/);
         return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : urlLimpia;
       };
@@ -591,7 +596,8 @@
         complete: function(results) {
           PRODUCTS = results.data.map(p => {
             let price = null;
-            // Primero intenta con priceArs, luego con priceUsd
+            
+            // Pasamos los precios por nuestro nuevo limpiador
             const cleanArs = limpiarPrecio(p.priceArs);
             const cleanUsd = limpiarPrecio(p.priceUsd);
 
@@ -601,22 +607,20 @@
                 price = cleanUsd * EXCHANGE_RATE;
             }
             
-            // Procesamiento de imágenes mejorado
             let imgArray = p.images ? String(p.images).split(',').map(i => formatearLink(i)) : [];
             let rawMain = p.image ? String(p.image).trim() : '';
             let mainImage = rawMain ? formatearLink(rawMain) : (imgArray.length > 0 ? imgArray[0] : '');
 
-            // Fallback: Si no hay imagen, usar un placeholder o dejar en blanco
-            // Puedes cambiar esta URL por un logo de tu tienda
+            // Placeholder gris por si alguna foto falla
             const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ctext x='50' y='50' font-family='sans-serif' font-size='14' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3ESin Imagen%3C/text%3E%3C/svg%3E";
 
             return { 
                 ...p, 
                 image: mainImage || placeholder, 
-                images: imgArray.filter(i => i), // Filtra enlaces vacíos
+                images: imgArray.filter(i => i), 
                 priceArs: price 
             };
-          }).filter(p => p.id); // Asegura que solo se carguen filas con ID
+          }).filter(p => p.id); 
 
           renderProducts();
           renderCart();
