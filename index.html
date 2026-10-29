@@ -623,8 +623,46 @@
 
           renderProducts();
           renderCart();
+          renderFeatured(); // <- Agregamos esta línea acá
         }
       });
+    }
+    function renderFeatured() {
+      const featuredContainer = document.getElementById("hero-featured-items");
+      if (!featuredContainer) return;
+
+      // Filtramos solo los equipos que tengan precio (asumimos que esos son los de stock real)
+      const stockItems = PRODUCTS.filter(p => p.category === 'equipos' && p.priceArs !== null);
+
+      if (stockItems.length === 0) {
+        featuredContainer.innerHTML = `<p class="text-center text-sm text-gray-500">Consultá el catálogo completo abajo 👇</p>`;
+        return;
+      }
+
+      // Elegimos dos al azar (o uno si solo hay uno)
+      let selected = [];
+      const shuffled = [...stockItems].sort(() => 0.5 - Math.random());
+      selected = shuffled.slice(0, Math.min(2, shuffled.length));
+
+      featuredContainer.innerHTML = selected.map(p => {
+        const price = formatMoney(p.priceArs);
+        // Determinamos la marca de forma simple para la etiqueta
+        const brandLabel = p.name.toLowerCase().includes('iphone') ? 'Apple' : (p.name.toLowerCase().includes('samsung') || p.name.toLowerCase().includes('galaxy') ? 'Samsung' : 'Destacado');
+        
+        return `
+          <div class="p-3.5 rounded-2xl bg-[#F5F5F7] dark:bg-[#1C1C1E] flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition" onclick="openProductModal('${p.id}')">
+            <div class="flex-1 min-w-0">
+              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">${brandLabel}</p>
+              <h3 class="font-bold text-sm text-[#1D1D1F] dark:text-white truncate">${p.name}</h3>
+              <p class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${p.condition || 'Excelente estado'}</p>
+            </div>
+            <div class="text-right shrink-0">
+              <p class="font-extrabold text-base text-[#1D1D1F] dark:text-white">${price}</p>
+              <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline">Ver fotos →</span>
+            </div>
+          </div>
+        `;
+      }).join("");
     }
     // VARIABLES Y LÓGICA DEL WIZARD DE PLAN CANJE
     const TRADEIN_MODELS = {
