@@ -350,8 +350,8 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         <div class="w-full md:w-1/2 bg-gray-100 dark:bg-[#000000] flex flex-col relative h-[45vh] md:h-auto">
-          <div class="flex-1 w-full bg-white dark:bg-black relative flex items-center justify-center p-4 overflow-hidden">
-            <img id="modal-main-img" src="" class="object-contain w-full h-full drop-shadow-sm" alt="Imagen principal" />
+          <div id="img-zoom-container" class="flex-1 w-full bg-white dark:bg-black relative flex items-center justify-center p-4 overflow-hidden cursor-crosshair">
+            <img id="modal-main-img" src="" class="object-contain w-full h-full drop-shadow-sm transition-transform duration-75" alt="Imagen principal" />
           </div>
           <div id="modal-thumbnails" class="flex gap-3 p-4 bg-gray-50 dark:bg-[#000000] overflow-x-auto no-scrollbar border-t border-gray-200 dark:border-gray-800"></div>
         </div>
@@ -917,7 +917,31 @@
       await obtenerDolarBlue(); 
       loadProducts(); 
     }
+// EFECTO ZOOM ESTILO MERCADO LIBRE
+    const zoomContainer = document.getElementById('img-zoom-container');
+    const zoomImg = document.getElementById('modal-main-img');
 
+    zoomContainer.addEventListener('mousemove', (e) => {
+      // Evitar el zoom si estamos en dispositivos móviles (pantallas chicas)
+      if (window.innerWidth < 768) return; 
+
+      // Obtenemos las dimensiones y posición del contenedor
+      const { left, top, width, height } = zoomContainer.getBoundingClientRect();
+      
+      // Calculamos la posición del cursor en porcentaje (0 a 100%)
+      const x = ((e.clientX - left) / width) * 100;
+      const y = ((e.clientY - top) / height) * 100;
+      
+      // Movemos el origen de la imagen a la posición del cursor y escalamos
+      zoomImg.style.transformOrigin = `${x}% ${y}%`;
+      zoomImg.style.transform = 'scale(2.5)'; // Puedes cambiar el 2.5 por más o menos zoom
+    });
+
+    zoomContainer.addEventListener('mouseleave', () => {
+      // Cuando el mouse sale, la imagen vuelve a la normalidad
+      zoomImg.style.transformOrigin = 'center center';
+      zoomImg.style.transform = 'scale(1)';
+    });
     iniciarTienda();
   </script>
 </body>
