@@ -488,7 +488,7 @@
       Papa.parse(SPREADSHEET_URL, {
         download: true,
         header: true,
-        dynamicTyping: true,
+        dynamicTyping: false,
         complete: function(results) {
           PRODUCTS = results.data.map(p => {
             let price = null;
