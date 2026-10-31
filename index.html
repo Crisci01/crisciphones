@@ -344,7 +344,50 @@
       </div>
     </div>
   </section>
+<!-- SECCIÓN FAQ -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="text-2xl font-extrabold text-center mb-8 text-[#1D1D1F] dark:text-white">Preguntas Frecuentes</h2>
+    <div class="space-y-4">
+      <details class="group bg-[#F5F5F7] dark:bg-[#1C1C1E] rounded-2xl border border-gray-200 dark:border-gray-800 [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex items-center justify-between p-5 font-bold cursor-pointer text-[#1D1D1F] dark:text-white">
+          <span>¿Cómo funciona el Plan Canje?</span>
+          <span class="transition duration-300 group-open:-rotate-180">
+            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"><path d="M19 9l-7 7-7-7"></path></svg>
+          </span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          Es muy fácil: cotizás tu equipo usado mediante nuestro formulario interactivo en la web, nos enviás el resumen por WhatsApp, y te pasamos la diferencia exacta a pagar. Entregás el tuyo y te llevás el nuevo en el momento.
+        </div>
+      </details>
+      <details class="group bg-[#F5F5F7] dark:bg-[#1C1C1E] rounded-2xl border border-gray-200 dark:border-gray-800 [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex items-center justify-between p-5 font-bold cursor-pointer text-[#1D1D1F] dark:text-white">
+          <span>¿Qué métodos de pago aceptan?</span>
+          <span class="transition duration-300 group-open:-rotate-180">
+            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"><path d="M19 9l-7 7-7-7"></path></svg>
+          </span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          Aceptamos transferencia bancaria, dólares físicos, USDT, y tenemos opciones de financiación. Podés combinar métodos de pago sin problema.
+        </div>
+      </details>
+      <details class="group bg-[#F5F5F7] dark:bg-[#1C1C1E] rounded-2xl border border-gray-200 dark:border-gray-800 [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex items-center justify-between p-5 font-bold cursor-pointer text-[#1D1D1F] dark:text-white">
+          <span>¿Cómo son los equipos "Por Encargo"?</span>
+          <span class="transition duration-300 group-open:-rotate-180">
+            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"><path d="M19 9l-7 7-7-7"></path></svg>
+          </span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          Si buscás un modelo específico que no tenemos en stock físico, te lo traemos a pedido. Esta modalidad suele tener un <strong>descuento especial</strong> respecto al precio de lista.
+        </div>
+      </details>
+    </div>
+  </section>
 
+  <!-- NOTIFICACIÓN TOAST (Flotante) -->
+  <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-[#1D1D1F] text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+    <span>✅</span> Producto agregado al carrito
+  </div>
   <!-- FOOTER -->
   <footer class="bg-[#1D1D1F] dark:bg-[#000000] text-white py-12 border-t border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -801,15 +844,43 @@
       document.getElementById("product-modal").classList.add("hidden");
     }
 
-    function renderProducts() {
+   function renderProducts() {
       const grid = document.getElementById("products-grid");
-      const filtered = currentCategory === "all" ? PRODUCTS : PRODUCTS.filter(p => p.category === currentCategory);
+      const searchVal = document.getElementById("search-input").value.toLowerCase();
+      const sortVal = document.getElementById("sort-select").value;
+
+      // 1. Filtro por categoría
+      let filtered = currentCategory === "all" ? PRODUCTS : PRODUCTS.filter(p => p.category === currentCategory);
+
+      // 2. Filtro por buscador (si hay texto escrito)
+      if (searchVal) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(searchVal));
+      }
+
+      // 3. Filtro de ordenamiento por precio
+      if (sortVal === "price-asc") {
+        filtered.sort((a, b) => {
+          const priceA = a.priceArs !== null ? a.priceArs : Infinity; // Los sin precio van al final
+          const priceB = b.priceArs !== null ? b.priceArs : Infinity;
+          return priceA - priceB;
+        });
+      } else if (sortVal === "price-desc") {
+        filtered.sort((a, b) => {
+          const priceA = a.priceArs !== null ? a.priceArs : -Infinity;
+          const priceB = b.priceArs !== null ? b.priceArs : -Infinity;
+          return priceB - priceA;
+        });
+      }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 py-10">Cargando catálogo...</p>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-12">
+            <span class="text-4xl block mb-3">🔍</span>
+            <p class="text-gray-500 dark:text-gray-400 font-medium">No encontramos equipos con esa búsqueda.</p>
+          </div>`;
         return;
       }
 
+      // 4. Renderizado (el mapeo html que ya tenías)
       grid.innerHTML = filtered.map(p => {
         let priceHtml = "";
         if (p.priceArs !== null) {
@@ -841,7 +912,8 @@
           buttonHtml = `<button onclick="openProductModal('${p.id}')" class="mt-4 w-full bg-white dark:bg-[#2C2C2E] text-[#1D1D1F] dark:text-white border border-gray-300 dark:border-gray-700 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-gray-100 dark:hover:bg-gray-700 transition">Ver Detalles y Fotos</button>`;
         } else {
           const btnLabel = p.priceArs !== null ? "Agregar al Pedido" : "Consultar Ingreso";
-          buttonHtml = `<button onclick="addToCart('${p.id}')" class="mt-4 w-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-black/80 dark:hover:bg-gray-200 transition">${btnLabel}</button>`;
+          // Notarás que agregué showToast() aquí también
+          buttonHtml = `<button onclick="addToCart('${p.id}'); showToast();" class="mt-4 w-full bg-[#1D1D1F] dark:bg-white text-white dark:text-black py-3 rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-black/80 dark:hover:bg-gray-200 transition">${btnLabel}</button>`;
         }
 
         return `
@@ -863,7 +935,15 @@
         `;
       }).join("");
     }
-
+function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 2500); // Desaparece a los 2.5 segundos
+    }
     function addToCart(productId) {
       const prod = PRODUCTS.find(p => p.id === productId);
       if (!prod) return;
@@ -871,7 +951,7 @@
       if (existing) existing.qty += 1;
       else cart.push({ ...prod, qty: 1 });
       renderCart();
-      toggleCart(true);
+      showToast();
     }
 
     function removeFromCart(productId) {
